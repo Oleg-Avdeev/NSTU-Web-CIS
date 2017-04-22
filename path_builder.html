@@ -52,6 +52,10 @@
   		max-width: 80px;
 	}
 
+	.checkbox {
+		display: inline;
+	}
+
 </style>
 
 </head>
@@ -59,7 +63,7 @@
 
 
 <body>
-	<h1>КИС - Транспортная компания. <small>Отдел Эксплуатации - построение маршрута</small></h1>
+	<h1>КИС - Транспортная компания. <small>Отдел Эксплуатации - построение маршрута &#9925;</small></h1>
 
 	<div class="panel_point"> 
 
@@ -77,7 +81,6 @@
 		<h3>
 		<input type="checkbox" id ="unload" class="checkbox" name="unload"/> <small>Разгрузка</small> ::
 		<input type="checkbox" id="load" class="checkbox" name="load"/> <small>Погрузка</small>
-
 		</h3>
 	</p>
 	</div>
@@ -113,6 +116,66 @@
 
 </div>
 
+<div style="width: 40%; margin-left: 50%; margin-right: 10%; margin-top: 25px; margin-bottom: 25px; /*background-color: #FAA;*/ text-align: left;">
+<p><h3>Перегон - <small>Петропавловск Камчатский - Калининград </small></h3></p>
+<p>Дистанция между пунктами: 1230км</p>
+<p>Вес груза: 25т</p>
+<p>Полный вес состава: 100т</p>
+<p>Расход топлива на км : 1,2л</p>
+<p>Полный расход топлива: 1600л</p>
+<p>Перечень груза:</p>
+</div>
+
+	<div class="panel_point"> 
+
+	<div class="block">
+	<p> 
+		<h2>Пункт - <small>Выбор пункта:
+		<select>
+			<option>a</option>
+			<option>b</option>
+			<option>c</option>
+		</select>
+		</small>
+		</h2>
+
+		<h3>
+		<input type="checkbox" id ="unload" class="checkbox" name="unload"/> <small>Разгрузка</small> ::
+		<input type="checkbox" id="load" class="checkbox" name="load"/> <small>Погрузка</small>
+		</h3>
+	</p>
+	</div>
+
+	<div id="unload_div" class="block" hidden>
+		<p>
+			<h3>Загрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="1" maxlength="2" max="15" min = "1" value="1"></small></h3>
+		</p>
+		<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+		:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
+
+		<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+		:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
+
+		<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+		:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
+		
+		<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+		:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
+	</div>
+	
+	<div id="load_div" class="block" hidden>
+	<h3>Разгрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="2" maxlength="2" max="15" min = "1" value="1"></small></h3>
+		</p>
+	<select>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+	</select>
+	<input type="number" name="quantityUnload" min="1" max="8">
+
+	</div>
+
+</div>
 	<div style="width: 60%; margin-right: 15%; margin-left: 15%; margin-top: 25px; text-align: center;">
 		<button type="button" class="btn btn-default" style="width: 40%">Добавить Точку</button>
 	</div>
