@@ -79,15 +79,27 @@
 		</h2>
 
 		<h3>
-		<input type="checkbox" id ="load" class="checkbox" name="load"/> <small>Погрузка</small> ::
-		<input type="checkbox" id="unload" class="checkbox" name="unload"/> <small>Разгрузка</small>
+		<input type="checkbox" id = "load" 	 class="checkbox" name="load"/>   <small>Погрузка</small> ::
+		<input type="checkbox" id = "unload" class="checkbox" name="unload"/> <small>Разгрузка</small>
 		</h3>
 	</p>
+	</div>
+	
+	<div id="load_div" class="block" hidden>
+	<h3> Погрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="2" maxlength="2" max="15" min = "1" value="1"></small></h3>
+		</p>
+	<select>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+	</select>
+	<input type="number" name="quantityUnload" min="1" max="8">
+
 	</div>
 
 	<div id="unload_div" class="block" hidden>
 		<p>
-			<h3>Погрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="1" maxlength="2" max="15" min = "1" value="1"></small></h3>
+			<h3> Разгрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="1" maxlength="2" max="15" min = "1" value="1"></small></h3>
 		</p>
 		<div id="unload_inner_1">
 			<div class="quantityLoad"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
@@ -102,18 +114,6 @@
 			<div class="quantityLoad"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
 			:: Погрузить : <input type="number" id = "quantityLoad_1_4" name="quantityLoad" min="1" max="8"></div>
 		</div>
-	</div>
-	
-	<div id="load_div" class="block" hidden>
-	<h3>Разгрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="2" maxlength="2" max="15" min = "1" value="1"></small></h3>
-		</p>
-	<select>
-		<option>a</option>
-		<option>b</option>
-		<option>c</option>
-	</select>
-	<input type="number" name="quantityUnload" min="1" max="8">
-
 	</div>
 
 </div>

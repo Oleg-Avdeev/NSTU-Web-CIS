@@ -33,6 +33,7 @@ function quantity_handler(that){	//event handler for checkboxes
 	};
 
 	if (number > children){	
+		
 		for (var i = 1; i <= (number-children); i++) { //crete order
 			$("#unload_inner_1").append("<div class=\"quantityLoad\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
 		}
