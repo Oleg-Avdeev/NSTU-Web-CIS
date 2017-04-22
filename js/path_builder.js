@@ -31,5 +31,15 @@ $(".quantity").change(function(){
 });
 
 function quantity_handler(that){
-	alert($(that).parents('.child_set').length + 1);
+	var children = $( "#unload_inner" ).children().length;
+	var number = $(that).val();
+	if (number > children){
+		for (var i = 0; i < (number-children); i++) {
+			$("#unload_inner").append("<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+		}
+	}
+	else
+	{
+		alert("throw down");
+	}
 }
