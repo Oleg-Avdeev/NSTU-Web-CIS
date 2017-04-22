@@ -86,22 +86,9 @@
 	</div>
 	
 	<div id="load_div" class="block" hidden>
-	<h3> Погрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="2" maxlength="2" max="15" min = "1" value="1"></small></h3>
+	<h3> Погрузка - <small> Количество: <input type="number" class="quantity" id = "load_inner" size="2" maxlength="2" max="15" min = "1" value="1"></small></h3>
 		</p>
-	<select>
-		<option>a</option>
-		<option>b</option>
-		<option>c</option>
-	</select>
-	<input type="number" name="quantityUnload" min="1" max="8">
-
-	</div>
-
-	<div id="unload_div" class="block" hidden>
-		<p>
-			<h3> Разгрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="1" maxlength="2" max="15" min = "1" value="1"></small></h3>
-		</p>
-		<div id="unload_inner_1">
+		<div id="load_inner_1">
 			<div class="quantityLoad"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
 			:: Погрузить : <input type="number" id = "quantityLoad_1_1" name="quantityLoad" min="1" max="8"></div>
 
@@ -113,6 +100,26 @@
 		
 			<div class="quantityLoad"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
 			:: Погрузить : <input type="number" id = "quantityLoad_1_4" name="quantityLoad" min="1" max="8"></div>
+		</div>
+
+	</div>
+
+	<div id="unload_div" class="block" hidden>
+		<p>
+			<h3> Разгрузка - <small> Количество: <input type="number" class="quantity" id = "unload_inner" size="1" maxlength="2" max="15" min = "1" value="1"></small></h3>
+		</p>
+		<div id="unload_inner_1">
+			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+			:: Разгрузить : <input type="number" id = "quantityUnload_1_1" name="quantityUnload" min="1" max="8"></div>
+
+			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+			:: Разгрузить : <input type="number" id = "quantityUnload_1_2" name="quantityUnload" min="1" max="8"></div>
+
+			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+			:: Разгрузить : <input type="number" id = "quantityUnload_1_3" name="quantityUnload" min="1" max="8"></div>
+		
+			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+			:: Разгрузить : <input type="number" id = "quantityUnload_1_4" name="quantityUnload" min="1" max="8"></div>
 		</div>
 	</div>
 

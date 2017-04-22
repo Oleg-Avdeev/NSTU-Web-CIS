@@ -3,7 +3,7 @@ $(".checkbox").change(function() { //event catcher on change checkboxes
 });
 
 function checkbox_handle(that){	//event handler for checkboxes
-	var element_id = "#"+$(that).attr("id")+"_div"; //get name of div that depends on checkbox name (because i cannot do it better)
+	var element_id = "#"+$(that).attr("id")+"_div"; //get that_name of div that depends on checkbox that_name (because i cannot do it better)
 	if(that.checked) { 
     	$(element_id).fadeIn("fast","swing");	//animations
     }
@@ -18,7 +18,9 @@ $(".quantity").change(function(){ //event catcher of changes of inputs (number q
 });
 
 function quantity_handler(that){	//event handler for checkboxes
-	var children = $( "#unload_inner_1" ).children().length; //number of children (inputs)
+	var name = $(that).attr('id');
+	var that_name ="#" + name + "_1";
+	var children = $(that_name).children().length; //number of children (inputs)
 	var number = $(that).val();	
 
 	if (number <= 0){ //check if number is in our diprosone
@@ -33,9 +35,13 @@ function quantity_handler(that){	//event handler for checkboxes
 	};
 
 	if (number > children){	
-		
 		for (var i = 1; i <= (number-children); i++) { //crete order
-			$("#unload_inner_1").append("<div class=\"quantityLoad\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			if (name == "load_inner"){
+				$(that_name).append("<div class=\"quantityLoad\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			}
+		else if (name == "unload_inner"){
+				$(that_name).append("<div class=\"quantityLoad\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			}
 		}
 	}
 	else
