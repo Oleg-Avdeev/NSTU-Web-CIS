@@ -5,11 +5,11 @@ $(".checkbox").change(function() { //event catcher on change checkboxes
 function checkbox_handle(that){	//event handler for checkboxes
 	var element_id = "#"+$(that).attr("id")+"_div"; //get name of div that depends on checkbox name (because i cannot do it better)
 	if(that.checked) { 
-    	$(element_id).show("slow");	//animations
+    	$(element_id).fadeIn("fast","swing");	//animations
     }
  	else
  	{
- 		$(element_id).hide("slow");
+ 		$(element_id).fadeOut("slow", "swing");
  	}
 }
 
