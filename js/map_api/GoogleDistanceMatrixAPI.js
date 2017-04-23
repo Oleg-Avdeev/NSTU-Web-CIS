@@ -1,19 +1,26 @@
-$("#add_point").click(function() {
-			GetDistance();
-		});
+// $("#add_point").click(function() {
+// 			GetDistance("Хабаровск", "Калининград");
+// 		});
 
-function GetDistance()
+function GetDistance(origin, destination)
 {
 	var apikey = "AIzaSyDECyua6rkg2yibx8sqUnT0cfd_8TgKDR4";
-	var query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Seattle&destinations=San+Francisco&key=";
-	query += apikey;
-
+  var origins = "origins=" + origin;
+  var destinations = "&destinations=" + destination;
+  
+	var query = "https://maps.googleapis.com/maps/api/distancematrix/json?" + origins + destinations + "&language=ru&key=" + apikey;
+  alert(query);
  $.ajax({
       crossOrigin: true,
-      url : "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.86,151.195&radius=5000&type=ATM&keyword=ATM&key=MyKey",
+      // dataType: 'json',
+      url : query,
       type : "GET",
+      
       success:function(data){
          console.log(data);
+         var response = JSON.parse(data);
+         alert(response.rows[0].elements[0].distance.text);
+
       }
     })
 
