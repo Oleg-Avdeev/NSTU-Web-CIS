@@ -58,13 +58,11 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 	else
 	{
-		for (var i = 0; i < (children-number); i++) {	//delete order
-			alert("iteration " + i);
-			$.when(
-				$(that_name+" div:last-child").hide("slow", "swing", function(){})
-				).done(function(){
-					$(that_name+" div:last-child").remove()
-				});
+		for (var i = number; i < (children); i++) {							// deleting from number to total count	
+			$(that_name).children().eq(i).hide("slow", "swing", function(){ // animating i-th child
+					$(this).remove(); 										// removing animated child
+			});
 		}
+
 	}
 }
