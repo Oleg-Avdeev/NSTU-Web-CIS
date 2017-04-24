@@ -25,6 +25,15 @@ $(".quantity").change(function(){ //event catcher of changes of inputs (number q
 	quantity_handler(this);
 });
 
+function callback_delete(that_that_name, i, treshold){
+	if(i>=treshold) return;
+	$(that_that_name+" div:last-child").hide("slow", "swing", function(){}); //TODO this only works for first iteration
+	$(that_that_name+" div:last-child").remove();
+	// $.when( $(that_that_name+" div:last-child").hide("slow", "swing", function(){})).done(function(){$(that_that_name+" div:last-child").remove();});
+	callback_delete(that_that_name, (i+1), treshold);
+
+	// return(true);
+}
 
 function quantity_handler(that){	//event handler for checkboxes
 	var name = $(that).attr('id');
@@ -58,13 +67,13 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 	else
 	{
-		for (var i = 0; i < (children-number); i++) {	//delete order
-			alert("iteration " + i);
-			$.when(
-				$(that_name+" div:last-child").hide("slow", "swing", function(){})
-				).done(function(){
-					$(that_name+" div:last-child").remove()
-				});
-		}
+		callback_delete(that_name, 0, (children-number));
+		// for (var i = 0; i < (children-number); i++) {	//delete order
+			
+		// 	//alert("be4 cycle " + canigo);
+		// 	while(!canigo){};
+		// 	//alert("after cycle " + canigo);
+		// }
 	}
 }
+
