@@ -78,14 +78,8 @@ function quantity_handler(that){	//event handler for checkboxes
 				$("#select_order_1_1 option").each(function() {
 	    			$(this).remove();
 				});
-				
-				//alert(resp + "0");
+
 				var items = resp.split("\n");
-				// $.each(items, function (i, item) { //too hungryto get this work right now
-		  //   		$('#city').append($('<option>', { 
-		  //       		text: item,
-		  //   		}));
-				// });
 
 				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
 		    		$('#select_order_1_1').append($('<option>', { 
@@ -93,6 +87,20 @@ function quantity_handler(that){	//event handler for checkboxes
 		    		}));
 		    	};
 		}});
+});
+
+ $("#load_inner").ready(function(){
+ 	
+ 		$.ajax({
+ 			url: '/php/order_counter.php',
+ 			type: 'POST',
+ 			dataType: 'text',
+ 			data: {gorod: $('#select_city option:selected').text()},
+ 		
+ 		success: function(resp){
+ 			$input = $("#load_inner");
+ 			$input.attr('max', resp);
+ 		}});
 });
 
  $("#select_city").change(function() {
