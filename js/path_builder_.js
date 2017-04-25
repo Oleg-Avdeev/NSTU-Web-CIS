@@ -15,6 +15,46 @@ function checkbox_handle(that){	//event handler for checkboxes for fade/show div
  	}
 }
 
+function fill_orders() {
+		// var gorod = $('select[name=City] option:selected').text();
+		//city_handler(this);
+		
+	$.ajax({
+		method: 'POST',
+		dataType: 'text',
+		url: 'php/Organization-Delivery-Count.php',
+		data: {
+			gorod : $('#select_city option:selected').text()
+		},
+		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
+			{
+
+				$("#select_order_1_1 option").each(function() {
+	    			$(this).remove();
+				});
+
+				var items = resp.split("\n");
+
+				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+		    		$('#select_order_1_1').append($('<option>', { 
+		        		text: items[i],
+		    		}));
+		    	};
+		}});
+
+	$.ajax({
+ 			url: '/php/order_counter.php',
+ 			type: 'POST',
+ 			dataType: 'text',
+ 			data: {gorod: $('#select_city option:selected').text()},
+ 		
+ 		success: function(resp){
+ 			$input = $("#load_inner");
+ 			$input.attr('max', resp);
+ 		}});
+
+}
+
 $(".quantity").change(function(){ //event catcher of changes of inputs (number quantity) 
 	quantity_handler(this);
 });
@@ -61,50 +101,10 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 }
 
- $("#select_city").ready(function() {
-		// var gorod = $('select[name=City] option:selected').text();
-		//city_handler(this);
-		
-	$.ajax({
-		method: 'POST',
-		dataType: 'text',
-		url: 'php/Organization-Delivery-Count.php',
-		data: {
-			gorod : $('#select_city option:selected').text()
-		},
-		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-			{
-
-				$("#select_order_1_1 option").each(function() {
-	    			$(this).remove();
-				});
-
-				var items = resp.split("\n");
-
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-		    		$('#select_order_1_1').append($('<option>', { 
-		        		text: items[i],
-		    		}));
-		    	};
-		}});
-
-	$.ajax({
- 			url: '/php/order_counter.php',
- 			type: 'POST',
- 			dataType: 'text',
- 			data: {gorod: $('#select_city option:selected').text()},
- 		
- 		success: function(resp){
- 			$input = $("#load_inner");
- 			$input.attr('max', resp);
- 		}});
-
-});
+ $("#select_city").ready(fill_orders());
 
 
  $("#select_city").change(function() {
-		// var gorod = $('select[name=City] option:selected').text();
-		//city_handler(this);
 		
 	$.ajax({
 		method: 'POST',
@@ -134,6 +134,7 @@ function quantity_handler(that){	//event handler for checkboxes
 		    		}));
 		    	};
 		}});
+
 	$.ajax({
  			url: '/php/order_counter.php',
  			type: 'POST',
