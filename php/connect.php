@@ -5,8 +5,9 @@
 	$user='daysofok_develop'; // заданное вами имя пользователя, либо определенное провайдером
 	$pswd='AVT_412'; // заданный вами пароль
 
-	$dbh = mysql_connect($host, $user, $pswd) or die("Не могу соединиться с MySQL.");
-	mysql_query("SET NAMES utf8");
-	mysql_select_db($database) or die("Не могу подключиться к базе.");
+	$dbh = mysqli_connect($host, $user, $pswd, $database) or die("Не могу соединиться с MySQL.");
+	mysqli_query($dbh, "SET NAMES utf8");
+	//mysqli_select_db($database) or die("Не могу подключиться к базе.");
+	return $dbh;
 }
 ?>
