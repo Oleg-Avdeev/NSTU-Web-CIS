@@ -15,6 +15,46 @@ function checkbox_handle(that){	//event handler for checkboxes for fade/show div
  	}
 }
 
+function fill_orders() {
+		// var gorod = $('select[name=City] option:selected').text();
+		//city_handler(this);
+		
+	$.ajax({
+		method: 'POST',
+		dataType: 'text',
+		url: 'php/Organization-Delivery-Count.php',
+		data: {
+			gorod : $('#select_city option:selected').text()
+		},
+		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
+			{
+
+				$("#select_order_1_1 option").each(function() {
+	    			$(this).remove();
+				});
+
+				var items = resp.split("\n");
+
+				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+		    		$('#select_order_1_1').append($('<option>', { 
+		        		text: items[i],
+		    		}));
+		    	};
+		}});
+
+	$.ajax({
+ 			url: '/php/order_counter.php',
+ 			type: 'POST',
+ 			dataType: 'text',
+ 			data: {gorod: $('#select_city option:selected').text()},
+ 		
+ 		success: function(resp){
+ 			$input = $("#load_inner");
+ 			$input.attr('max', resp);
+ 		}});
+
+}
+
 //	The better way to implement catching this event
 // 	"Don't blame the player, blame the game".
 var lastQuatityValue = [1, 1]; //an array because life is hard
@@ -29,12 +69,10 @@ $(".quantity").on('change keyup paste mouseup', function() {
     }
 });
 
-
 function quantity_handler(that){	//event handler for checkboxes
 	var name = $(that).attr('id');
 	var that_name ="#" + name + "_1";
 	// alert("that_name " + that_name);
-
 	var children = $(that_name).children().length; //number of children (inputs)
 	var number = $(that).val();	
 
@@ -64,7 +102,6 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 	else
 	{
-		console.log("delete: " + number + " / " + children);
 		for (var i = number; i < (children); i++) {							// deleting from number to total count	
 			$(that_name).children().eq(i).slideUp("fast", "swing", function(){ // animating i-th child
 					$(this).remove(); 										// removing animated child
@@ -73,50 +110,10 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 }
 
- $("#select_city").ready(function() {
-		// var gorod = $('select[name=City] option:selected').text();
-		//city_handler(this);
-		
-	$.ajax({
-		method: 'POST',
-		dataType: 'text',
-		url: 'php/Organization-Delivery-Count.php',
-		data: {
-			gorod : $('#select_city option:selected').text()
-		},
-		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-			{
-
-				$("#select_order_1_1 option").each(function() {
-	    			$(this).remove();
-				});
-
-				var items = resp.split("\n");
-
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-		    		$('#select_order_1_1').append($('<option>', { 
-		        		text: items[i],
-		    		}));
-		    	};
-		}});
-
-	$.ajax({
- 			url: '/php/order_counter.php',
- 			type: 'POST',
- 			dataType: 'text',
- 			data: {gorod: $('#select_city option:selected').text()},
- 		
- 		success: function(resp){
- 			$input = $("#load_inner");
- 			$input.attr('max', resp);
- 		}});
-
-});
+ $("#select_city").ready(fill_orders());
 
 
  $("#select_city").change(function() {
-		// var gorod = $('select[name=City] option:selected').text();
-		//city_handler(this);
 		
 	$.ajax({
 		method: 'POST',
@@ -145,7 +142,9 @@ function quantity_handler(that){	//event handler for checkboxes
 		        		text: items[i],
 		    		}));
 		    	};
-		}});
+		}
+	});
+
 	$.ajax({
  			url: '/php/order_counter.php',
  			type: 'POST',
@@ -155,7 +154,9 @@ function quantity_handler(that){	//event handler for checkboxes
  		success: function(resp){
  			$input = $("#load_inner");
  			$input.attr('max', resp);
- 		}});
+ 		}
+ 	});
+
 });
 
 
@@ -180,7 +181,3 @@ function quantity_handler(that){	//event handler for checkboxes
 // 	}
 // 	animation_show(that_name, 0);
 // 	$(that).fadeIn("fast","swing");	//animations
-
-
-// }
-
