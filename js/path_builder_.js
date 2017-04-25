@@ -64,20 +64,56 @@ function quantity_handler(that){	//event handler for checkboxes
  $("#select_city").ready(function() {
 		// var gorod = $('select[name=City] option:selected').text();
 		//city_handler(this);
+		
 	$.ajax({
-		type: 'POST',
+		method: 'POST',
 		dataType: 'text',
 		url: 'php/Organization-Delivery-Count.php',
 		data: {
-			gorod : $('select[name=City] option:selected').text()
+			gorod : $('#select_city option:selected').text()
 		},
 		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
 			{
+
 				$("#select_order_1_1 option").each(function() {
 	    			$(this).remove();
 				});
+				
+				//alert(resp + "0");
+				var items = resp.split("\n");
+				// $.each(items, function (i, item) { //too hungryto get this work right now
+		  //   		$('#city').append($('<option>', { 
+		  //       		text: item,
+		  //   		}));
+				// });
 
-				alert(resp + "0");
+				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+		    		$('#select_order_1_1').append($('<option>', { 
+		        		text: items[i],
+		    		}));
+		    	};
+		}});
+});
+
+ $("#select_city").change(function() {
+		// var gorod = $('select[name=City] option:selected').text();
+		//city_handler(this);
+		
+	$.ajax({
+		method: 'POST',
+		dataType: 'text',
+		url: 'php/Organization-Delivery-Count.php',
+		data: {
+			gorod : $('#select_city option:selected').text()
+		},
+		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
+			{
+
+				$("#select_order_1_1 option").each(function() {
+	    			$(this).remove();
+				});
+				
+				//alert(resp + "0");
 				var items = resp.split("\n");
 				// $.each(items, function (i, item) { //too hungryto get this work right now
 		  //   		$('#city').append($('<option>', { 

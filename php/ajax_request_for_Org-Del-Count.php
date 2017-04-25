@@ -17,7 +17,7 @@ $.ajax({
     $(this).remove();
 });
 
-			alert(resp + "0");
+			//alert(resp + "0");
 			var items = resp.split("\n");
 			alert(items[2]);
 			// $.each(items, function (i, item) { //too hungryto get this work right now
