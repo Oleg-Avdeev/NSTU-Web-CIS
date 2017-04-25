@@ -13,60 +13,7 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 
-<style>
-	@import url('https://fonts.googleapis.com/css?family=Oswald');
-	@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
-	
-	body {
-		background-color: #F5F5F5;
-	}
-
-	h1 {
-		width: 100%; height: 60px;
-		background-color: #FFFFFF;
-		margin-top: 0px;
-		padding-top: 10px;
-		padding-left: 10px;
-	}
-
-	.panel_point {
-		width: 80%;
-		margin-left: 10%;
-		margin-right: 10%;
-		background-color: #FFFFFF;
-
-		padding: 10px;
-		border-radius: 10px;
-	}
-
-	.panel_path {
-		width: 40%;
-		margin-left: 50%; 
-		margin-right: 10%; 
-		margin-top: 25px; 
-		margin-bottom: 25px; 
-		/*background-color: #FAA;*/ 
-		text-align: left;
-	}
-
-	.block{
-		width: 33%;
-		height: 100%;
-		display: inline-table;
-	}
-
-	select {
-  		white-space: nowrap;
-  		overflow: hidden;
-  		text-overflow: ellipsis;
-  		max-width: 80px;
-	}
-
-	.checkbox {
-		display: inline;
-	}
-
-</style>
+	<link rel="stylesheet" type="text/css" href="css/path_builder.css">
 
 </head>
 
