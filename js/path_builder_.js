@@ -87,11 +87,8 @@ function quantity_handler(that){	//event handler for checkboxes
 		    		}));
 		    	};
 		}});
-});
 
- $("#load_inner").ready(function(){
- 	
- 		$.ajax({
+	$.ajax({
  			url: '/php/order_counter.php',
  			type: 'POST',
  			dataType: 'text',
@@ -101,7 +98,9 @@ function quantity_handler(that){	//event handler for checkboxes
  			$input = $("#load_inner");
  			$input.attr('max', resp);
  		}});
+
 });
+
 
  $("#select_city").change(function() {
 		// var gorod = $('select[name=City] option:selected').text();
@@ -135,6 +134,16 @@ function quantity_handler(that){	//event handler for checkboxes
 		    		}));
 		    	};
 		}});
+	$.ajax({
+ 			url: '/php/order_counter.php',
+ 			type: 'POST',
+ 			dataType: 'text',
+ 			data: {gorod: $('#select_city option:selected').text()},
+ 		
+ 		success: function(resp){
+ 			$input = $("#load_inner");
+ 			$input.attr('max', resp);
+ 		}});
 });
 
 
