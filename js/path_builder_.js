@@ -15,8 +15,18 @@ function checkbox_handle(that){	//event handler for checkboxes for fade/show div
  	}
 }
 
-$(".quantity").change(function(){ //event catcher of changes of inputs (number quantity) 
-	quantity_handler(this);
+//	The better way to implement catching this event
+// 	"Don't blame the player, blame the game".
+var lastQuatityValue = [1, 1]; //an array because life is hard
+$(".quantity").on('change keyup paste mouseup', function() {
+	var name = $(this).attr('id');
+	var QuatityIndex = 0;
+	if (name == "unload_div") QuatityIndex = 1;
+
+    if ($(this).val() != lastQuatityValue[QuatityIndex]) {
+        lastQuatityValue[QuatityIndex] = $(this).val();
+        quantity_handler(this);
+    }
 });
 
 
@@ -24,6 +34,7 @@ function quantity_handler(that){	//event handler for checkboxes
 	var name = $(that).attr('id');
 	var that_name ="#" + name + "_1";
 	// alert("that_name " + that_name);
+
 	var children = $(that_name).children().length; //number of children (inputs)
 	var number = $(that).val();	
 
@@ -53,6 +64,7 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 	else
 	{
+		console.log("delete: " + number + " / " + children);
 		for (var i = number; i < (children); i++) {							// deleting from number to total count	
 			$(that_name).children().eq(i).slideUp("fast", "swing", function(){ // animating i-th child
 					$(this).remove(); 										// removing animated child
