@@ -52,15 +52,6 @@
 		<div id="load_inner_1">
 			<div class="quantityLoad"> Заказ : <select id="select_order_1_1"> <option>a12312123</option> <option>b</option> <option>c</option> </select>
 			:: Погрузить : <input type="number" id = "quantityLoad_1_1" name="quantityLoad" min="1" max="8"></div>
-
-			<div class="quantityLoad"> Заказ : <select id="select_order_1_2"> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Погрузить : <input type="number" id = "quantityLoad_1_2" name="quantityLoad" min="1" max="8"></div>
-
-			<div class="quantityLoad"> Заказ : <select id="select_order_1_3"> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Погрузить : <input type="number" id = "quantityLoad_1_3" name="quantityLoad" min="1" max="8"></div>
-		
-			<div class="quantityLoad"> Заказ : <select id="select_order_1_4"> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Погрузить : <input type="number" id = "quantityLoad_1_4" name="quantityLoad" min="1" max="8"></div>
 		</div>
 
 	</div>
@@ -72,15 +63,6 @@
 		<div id="unload_inner_1">
 			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
 			:: Разгрузить : <input type="number" id = "quantityUnload_1_1" name="quantityUnload" min="1" max="8"></div>
-
-			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Разгрузить : <input type="number" id = "quantityUnload_1_2" name="quantityUnload" min="1" max="8"></div>
-
-			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Разгрузить : <input type="number" id = "quantityUnload_1_3" name="quantityUnload" min="1" max="8"></div>
-		
-			<div class="quantityUnload"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-			:: Разгрузить : <input type="number" id = "quantityUnload_1_4" name="quantityUnload" min="1" max="8"></div>
 		</div>
 	</div>
 
