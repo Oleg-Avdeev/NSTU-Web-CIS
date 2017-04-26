@@ -50,10 +50,10 @@ function quantity_handler(that){	//event handler for checkboxes
 	if (number > children){	
 		for (var i = 1; i <= (number-children); i++) { //crete order
 			if (name == "load_inner"){
-				$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+				$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select id =select_order_"+1+"_"+parseInt(children+i)+"> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
 			}
 			else if (name == "unload_inner"){//that "style=\"display: none;\"" is really important becouse i want smooth animation on parent
-			$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select id =select_order_"+1+"_"+parseInt(children+i)+"> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
 		}
 
 			$(that_name+" div:last-child").slideDown("fast", "swing");//that is a key to parent smooth animation.
@@ -70,17 +70,17 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 }
 
-$("#select_city").ready(function(){
-	$.ajax({
+$("#select_city").ready(function(){ //creating combobox on ready
+	$.ajax({						//working with php script
 		url: 'php/Select_city.php',
 		type: 'get',
-		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
+		dataType: 'html',
 		success: function(data){
 			var $response = $(data);
 			$("#select_city").append($(data));
 		}
 	}).done(function(){
-		$("#select_city").trigger("change");
+		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
 	})
 });
 
@@ -92,8 +92,17 @@ $("#select_city").change(function() {
 		data: {
 			gorod : $('#select_city option:selected').text()
 		},
-		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
+		success: function(resp)
 		{
+		//TODO: upload data to ALL load/unload combos, get custom creations for ALL load/unload combos (put options from db)
+		var children = $("#load_inner_1").children().length; 		//number of children (inputs)
+		alert(children);
+			for (var i = 1; i <= (children); i++) {					// showing from number to total count	
+			// alert("iteration " + i);
+			$("#select_order_1_" + i +" option").each(function() {
+				$(this).remove();	// removing i-th options
+			});		
+		}
 
 			$("#select_order_1_1 option").each(function() {
 				$(this).remove();
