@@ -27,15 +27,7 @@
 	<div class="block">
 	<p> 
 		<h2>Пункт - <small>Выбор пункта:
-		<select id="select_city" name = "city">
-			<?php
-			require_once('php/connect.php');
-			require_once('php/Select_city.php');
-			connect();
-			select_city();
-			?>
-
-		</select>
+		<select id="select_city" name = "city">	</select>
 		</small>
 		</h2>
 

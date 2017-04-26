@@ -9,51 +9,51 @@ function checkbox_handle(that){	//event handler for checkboxes for fade/show div
     	$(element_id).fadeIn("fast","swing");	//animations
     	// animation_show($(element_id), 0); //TODO animtions
     }
- 	else
- 	{
- 		$(element_id).fadeOut("fast", "swing");
- 	}
+    else
+    {
+    	$(element_id).fadeOut("fast", "swing");
+    }
 }
 
 function fill_orders() {
 		// var gorod = $('select[name=City] option:selected').text();
 		//city_handler(this);
 		
-	$.ajax({
-		method: 'POST',
-		dataType: 'text',
-		url: 'php/Organization-Delivery-Count.php',
-		data: {
-			gorod : $('#select_city option:selected').text()
-		},
+		$.ajax({
+			method: 'POST',
+			dataType: 'text',
+			url: 'php/Organization-Delivery-Count.php',
+			data: {
+				gorod : $('#select_city option:selected').text()
+			},
 		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-			{
+		{
 
-				$("#select_order_1_1 option").each(function() {
-	    			$(this).remove();
-				});
+			$("#select_order_1_1 option").each(function() {
+				$(this).remove();
+			});
 
-				var items = resp.split("\n");
+			var items = resp.split("\n");
 
 				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-		    		$('#select_order_1_1').append($('<option>', { 
-		        		text: items[i],
-		    		}));
-		    	};
-		}});
+					$('#select_order_1_1').append($('<option>', { 
+						text: items[i],
+					}));
+				};
+			}});
 
-	$.ajax({
- 			url: '/php/order_counter.php',
- 			type: 'POST',
- 			dataType: 'text',
- 			data: {gorod: $('#select_city option:selected').text()},
- 		
- 		success: function(resp){
- 			$input = $("#load_inner");
- 			$input.attr('max', resp);
- 		}});
+		$.ajax({
+			url: '/php/order_counter.php',
+			type: 'POST',
+			dataType: 'text',
+			data: {gorod: $('#select_city option:selected').text()},
+			
+			success: function(resp){
+				$input = $("#load_inner");
+				$input.attr('max', resp);
+			}});
 
-}
+	}
 
 //	The better way to implement catching this event
 // 	"Don't blame the player, blame the game".
@@ -63,10 +63,10 @@ $(".quantity").on('change keyup paste mouseup', function() {
 	var QuatityIndex = 0;
 	if (name == "unload_div") QuatityIndex = 1;
 
-    if ($(this).val() != lastQuatityValue[QuatityIndex]) {
-        lastQuatityValue[QuatityIndex] = $(this).val();
-        quantity_handler(this);
-    }
+	if ($(this).val() != lastQuatityValue[QuatityIndex]) {
+		lastQuatityValue[QuatityIndex] = $(this).val();
+		quantity_handler(this);
+	}
 });
 
 function quantity_handler(that){	//event handler for checkboxes
@@ -93,28 +93,40 @@ function quantity_handler(that){	//event handler for checkboxes
 				$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
 			}
 			else if (name == "unload_inner"){//that "style=\"display: none;\"" is really important becouse i want smooth animation on parent
-				$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
-				}
+			$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+		}
 
 			$(that_name+" div:last-child").slideDown("fast", "swing");//that is a key to parent smooth animation.
 			//I really do fcking need to hide elements first and then show them one by one
-			}
+		}
 	}
 	else
 	{
 		for (var i = number; i < (children); i++) {							// deleting from number to total count	
 			$(that_name).children().eq(i).slideUp("fast", "swing", function(){ // animating i-th child
 					$(this).remove(); 										// removing animated child
-			});
+				});
 		}
 	}
 }
 
- $("#select_city").ready(fill_orders());
+// $("#select_city").ready(fill_orders());
 
 
- $("#select_city").change(function() {
-		
+$("#select_city").ready(function(){
+	$.ajax({
+		url: 'php/Select_city.php',
+		type: 'get',
+		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
+		success: function(data){
+			var $response = $(data);
+			$("#select_city").append($(data));
+		}
+	})
+});
+
+$("#select_city").change(function() {
+	
 	$.ajax({
 		method: 'POST',
 		dataType: 'text',
@@ -123,12 +135,12 @@ function quantity_handler(that){	//event handler for checkboxes
 			gorod : $('#select_city option:selected').text()
 		},
 		success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-			{
+		{
 
-				$("#select_order_1_1 option").each(function() {
-	    			$(this).remove();
-				});
-				
+			$("#select_order_1_1 option").each(function() {
+				$(this).remove();
+			});
+			
 				//alert(resp + "0");
 				var items = resp.split("\n");
 				// $.each(items, function (i, item) { //too hungryto get this work right now
@@ -138,24 +150,24 @@ function quantity_handler(that){	//event handler for checkboxes
 				// });
 
 				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-		    		$('#select_order_1_1').append($('<option>', { 
-		        		text: items[i],
-		    		}));
-		    	};
-		}
-	});
+					$('#select_order_1_1').append($('<option>', { 
+						text: items[i],
+					}));
+				};
+			}
+		});
 
 	$.ajax({
- 			url: '/php/order_counter.php',
- 			type: 'POST',
- 			dataType: 'text',
- 			data: {gorod: $('#select_city option:selected').text()},
- 		
- 		success: function(resp){
- 			$input = $("#load_inner");
- 			$input.attr('max', resp);
- 		}
- 	});
+		url: '/php/order_counter.php',
+		type: 'POST',
+		dataType: 'text',
+		data: {gorod: $('#select_city option:selected').text()},
+		
+		success: function(resp){
+			$input = $("#load_inner");
+			$input.attr('max', resp);
+		}
+	});
 
 });
 
