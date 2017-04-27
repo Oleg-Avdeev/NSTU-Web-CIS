@@ -1,50 +1,96 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-	<title>Staff selection</title>
+	<meta charset="utf-8">
+	<title>Корпоративная Информационная Система - Выбор Состава</title>
 	<script src="js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+
+	<link rel="stylesheet" type="text/css" href="css/path_builder.css">
+
+	<style type="text/css">
+		
+		.panel_crew {
+			width: 40%;
+			margin-left: 30%;
+			margin-right: 30%;
+			border-radius: 10px;
+			background-color: #ffffff;
+			padding: 20px;
+		}
+
+		input  {
+			width: 100%;
+		}
+
+		#crew {
+			width: 100%;
+			min-width: 100%;
+			min-height: 50px;
+		}
+
+	</style>
+
 </head>
+
+
+
 <body>
-<h3>Crew:</h3>
-<select  id="crew">
-	<option>-----------------------------------</option>
-	<script>
-	$("#crew").ready(function() {
-	$.ajax({
-		url: 'php/fill_crew.php',
-				success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-		{
-			$("#crew option").each(function() {
-				$(this).remove();
+	
+	<h1>КИС - Транспортная компания.<small>Отдел Эксплуатации - Выбор состава экипажа</small></h1>
+
+<div class="panel_crew">
+	<h3>Сущетсвующие экипажи</h3>
+	<select  id="crew">
+		<option>-----------------------------------</option>
+			<script>
+				$("#crew").ready(function() {
+				$.ajax({
+					url: 'php/fill_crew.php',
+							success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
+					{
+						$("#crew option").each(function() {
+							$(this).remove();
+						});
+							var items = resp.split("\n");
+							for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+								$('#crew').append($('<option>', { 
+									text: items[i],
+								}));
+							};
+						}
+					})
+				.done(function(){
+					$("#crew").trigger("change");
+				})
 			});
-				var items = resp.split("\n");
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-					$('#crew').append($('<option>', { 
-						text: items[i],
-					}));
-				};
-			}
-		})
-	.done(function(){
-		$("#crew").trigger("change");
-	})
-});
-	$('#crew').change(function(){
-		var str = $('#crew option:selected').text().split('-');
-		$('#Driver_1').val(str[0].trim());
-		$('#Driver_2').val(str[1].trim());
-		$('#Tractor').val(str[2].trim());
-		$('#Trailer').val(str[3].trim());
-	});
-	</script>
-</select>
-<h3>Driver 1:</h3>
-<input type="text" id ="Driver_1">
-<h3>Driver 2:</h3>
-<input type="text" id="Driver_2">
-<h3>Tractor:</h3>
-<input type="text" id="Tractor">
-<h3>Trailer:</h3>
-<input type="text" id="Trailer">
+				$('#crew').change(function(){
+					var str = $('#crew option:selected').text().split('-');
+					$('#Driver_1').val(str[0].trim());
+					$('#Driver_2').val(str[1].trim());
+					$('#Tractor').val(str[2].trim());
+					$('#Trailer').val(str[3].trim());
+			});
+			</script>
+	</select>
+
+	<div style="margin-top: 50px;">
+		<h3>Первый водитель</h3> <input type="text" id ="Driver_1">
+		<h3>Второй водитель</h3> <input type="text" id="Driver_2">
+		<h3>Тягач</h3> <input type="text" id="Tractor">
+		<h3>Прицеп</h3> <input type="text" id="Trailer">
+	</div>
+
+	<button class="btn btn-primary" style="width: 100%; margin-top: 50px; height: 50px">Составить экипаж и перейти к построению маршрута</button>
+</div>
+
 </body>
 </html>
