@@ -104,19 +104,17 @@ $("#select_city").change(function() {
 			});		
 		}
 
-			$("#select_order_1_1 option").each(function() {
-				$(this).remove();
-			});
-
-				//alert(resp + "0");
-				var items = resp.split("\n");
-				// $.each(items, function (i, item) { //too hungryto get this work right now
-		  //   		$('#city').append($('<option>', { 
-		  //       		text: item,
-		  //   		}));
+				 var items = resp.split("\n");
+				// $.each(items, function (i, item) { //Working! Which one is better?
+				// 	if(item !=""){
+				// 		alert("0" + item + "0");
+				// 		$('#select_order_1_1').append($('<option>', { 
+				// 			text: item,
+				// 		}));
+				// 	}
 				// });
 
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution, but i dont like main one either (look up)
 					$('#select_order_1_1').append($('<option>', { 
 						text: items[i],
 					}));
