@@ -6,7 +6,7 @@
 	 *
 	 *		https://gist.github.com/1809044
 	 */
-	// The commands
+	// The commands fixed
 	$commands = array(
 		'echo $PWD',
 		'whoami',
