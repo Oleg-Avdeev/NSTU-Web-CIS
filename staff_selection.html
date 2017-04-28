@@ -51,35 +51,6 @@
 	<h3>Сущетсвующие экипажи</h3>
 	<select  id="crew">
 		<option>-----------------------------------</option>
-			<script>
-				$("#crew").ready(function() {
-				$.ajax({
-					url: 'php/fill_crew.php',
-							success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-					{
-						$("#crew option").each(function() {
-							$(this).remove();
-						});
-							var items = resp.split("\n");
-							for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-								$('#crew').append($('<option>', { 
-									text: items[i],
-								}));
-							};
-						}
-					})
-				.done(function(){
-					$("#crew").trigger("change");
-				})
-			});
-				$('#crew').change(function(){
-					var str = $('#crew option:selected').text().split('-');
-					$('#Driver_1').val(str[0].trim());
-					$('#Driver_2').val(str[1].trim());
-					$('#Tractor').val(str[2].trim());
-					$('#Trailer').val(str[3].trim());
-			});
-			</script>
 	</select>
 
 	<div style="margin-top: 50px;">
@@ -91,7 +62,5 @@
 
 	<button class="btn btn-primary" style="width: 100%; margin-top: 50px; height: 50px">Составить экипаж и перейти к построению маршрута</button>
 </div>
-
->>>>>>> cfa4395ee5819bfac775656dde56e85dcd1458cb
 </body>
 </html>

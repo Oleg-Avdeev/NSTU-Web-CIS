@@ -3,9 +3,9 @@
 		url: 'php/fill_crew.php',
 				success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
 		{
-			$("#crew option").each(function() {
+			/*$("#crew option").each(function() {
 				$(this).remove();
-			});
+			});*/
 				var items = resp.split("\n");
 				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
 					$('#crew').append($('<option>', { 
@@ -15,7 +15,7 @@
 			}
 		})
 	.done(function(){
-		$("#crew").trigger("change");
+	alert($('#crew option:selected').text());
 	})
 });
 
@@ -64,14 +64,15 @@ $(document).ready(function(){
 		});
 })
 
-$(document).ready(function(){$("#crew").trigger("change");})
 
-//$("#my_select :contains('two')").attr("selected", "selected"); VAJNO
+//$(document).ready(function(){$("#crew").trigger("change");})
 
-$('#crew').change(function(){
+$("#crew").change(function(){
 		var str = $('#crew option:selected').text().split('-');
-		$('#Driver_1').val(str[0].trim());
-		$('#Driver_2').val(str[1].trim());
-		$('#Tractor').val(str[2].trim());
-		$('#Trailer').val(str[3].trim());
-	});
+		alert($('#crew option:selected').text());
+		alert("KU");
+		$("#Driver_1 :contains(" + str[0].trim() + ")").attr("selected", "selected");
+		$("#Driver_2 :contains(" + str[1].trim() + ")").attr("selected", "selected");
+		$("#Tractor :contains(" + str[2].trim() + ")").attr("selected", "selected");
+		$("#Trailer :contains(" + str[3].trim() + ")").attr("selected", "selected");
+	})

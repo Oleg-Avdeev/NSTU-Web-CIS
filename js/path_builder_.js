@@ -73,7 +73,7 @@ function quantity_handler(that){	//event handler for checkboxes
 $("#select_city").ready(function(){
 	$.ajax({
 		url: 'php/Select_city.php',
-		type: 'get',
+		type: 'POST',
 		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
 		success: function(data){
 			var $response = $(data);
@@ -98,15 +98,7 @@ $("#select_city").change(function() {
 			$("#select_order_1_1 option").each(function() {
 				$(this).remove();
 			});
-
-				//alert(resp + "0");
 				var items = resp.split("\n");
-				// $.each(items, function (i, item) { //too hungryto get this work right now
-		  //   		$('#city').append($('<option>', { 
-		  //       		text: item,
-		  //   		}));
-				// });
-
 				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
 					$('#select_order_1_1').append($('<option>', { 
 						text: items[i],
