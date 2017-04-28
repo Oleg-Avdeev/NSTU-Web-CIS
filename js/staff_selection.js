@@ -15,7 +15,6 @@
 			}
 		})
 	.done(function(){
-	alert($('#crew option:selected').text());
 	})
 });
 
@@ -65,12 +64,10 @@ $(document).ready(function(){
 })
 
 
-//$(document).ready(function(){$("#crew").trigger("change");})
+//$(document).ready(function(){$("#crew").trigger("change");})Ы
 
 $("#crew").change(function(){
 		var str = $('#crew option:selected').text().split('-');
-		alert($('#crew option:selected').text());
-		alert("KU");
 		$("#Driver_1 :contains(" + str[0].trim() + ")").attr("selected", "selected");
 		$("#Driver_2 :contains(" + str[1].trim() + ")").attr("selected", "selected");
 		$("#Tractor :contains(" + str[2].trim() + ")").attr("selected", "selected");
