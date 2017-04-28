@@ -1,7 +1,5 @@
-	
-
-$(document).ready(function(){
-	$("#crew").ready(function() {
+$(document).ready(function(){//absolut need
+	$("#crew").ready(function() { //what da actuall heck
 		$.ajax({
 			url: 'php/fill_crew.php',
 				success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
@@ -33,7 +31,7 @@ $(document).ready(function(){
 		url: 'php/fill_driver.php',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
 		success: function(resp){
 			var items = resp.split("\n");
-			for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+			for (var i = items.length - 2; i >= 0; i--) {	//temporary solution wich was mindlessly copypastedim so sad now D:
 				$('#Driver_1').append($('<option>', { 
 					text: items[i],
 				}));
@@ -60,7 +58,7 @@ $(document).ready(function(){
 		url: 'php/fill_trailer.php',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
 		success: function(resp){	
 			var items = resp.split("\n");
-			for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
+			for (var i = items.length - 2; i >= 0; i--) {	//temporary solution = array is the best
 				$('#Trailer').append($('<option>', { 
 					text: items[i],
 				}));
