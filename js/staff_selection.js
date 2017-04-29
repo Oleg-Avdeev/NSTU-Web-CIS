@@ -67,4 +67,14 @@ $(document).ready(function(){//absolut need
 	});
 })
 
+$('#x_form').submit(function(event){
+	$.ajax({
+		url: 'php/staff_button',
+		type: 'POST',
+		data: $('#x_form').serialize(),
+		success: function(){
+			alert("tut");
+		}
+	});
+})
 
