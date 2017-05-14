@@ -53,3 +53,19 @@
 	#select_city {
 		max-width: 250px
 	}
+
+	a.boxclose{
+    	float:right;
+    	cursor:pointer;
+    	color: #605F61;
+    	background: #fff;
+    	font-size: 30px;
+    	font-weight: bold;
+    	display: inline;
+    	line-height: 0px;
+    	padding: 11px 4px;       
+	}
+
+	.boxclose:before {
+    	content: "×";
+    }

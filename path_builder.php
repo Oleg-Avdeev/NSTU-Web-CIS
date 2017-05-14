@@ -58,6 +58,8 @@
 		</div>
 	</div>
 
+	<a class="boxclose" id="boxclose"></a>
+
 </div>
 
 <div class="panel_path" id="path_1">
