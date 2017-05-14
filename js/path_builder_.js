@@ -88,16 +88,11 @@ function quantity_handler(that){	//event handler for checkboxes
 $(".select_city").ready(function(event){ //creating combobox on ready
 	$.ajax({						//working with php script
 		url: 'php/Select_city.php',
-<<<<<<< HEAD
-		type: 'get',
-		dataType: 'html',
-=======
 		type: 'POST',
 		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
->>>>>>> 0e8c89c502539c05b35b87750e58a9e56f11dc96
 		success: function(data){
 			var target = $(event.target);
-			alert(target.id);
+			// alert(target.id);
 			var $response = $(data);
 			$(event.target).append($(data));
 		}
@@ -118,39 +113,21 @@ $("#select_city").change(function() {
 		{
 		//TODO: upload data to ALL load/unload combos, get custom creations for ALL load/unload combos (put options from db)
 		var children = $("#load_inner_1").children().length; 		//number of children (inputs)
-		alert(children);
 			for (var i = 1; i <= (children); i++) {					// showing from number to total count	
-			// alert("iteration " + i);
 			$("#select_order_1_" + i +" option").each(function() {
 				$(this).remove();	// removing i-th options
 			});		
 		}
-
-<<<<<<< HEAD
 				var items = resp.split("\n");
-				// $.each(items, function (i, item) { //Working! Which one is better?
-				// 	if(item !=""){
-				// 		alert("0" + item + "0");
-				// 		$('#select_order_1_1').append($('<option>', { 
-				// 			text: item,
-				// 		}));
-				// 	}
-				// });
-
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution, but i dont like main one either (look up)
-=======
-			$("#select_order_1_1 option").each(function() {
-				$(this).remove();
-			});
-				var items = resp.split("\n");
-				for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
->>>>>>> 0e8c89c502539c05b35b87750e58a9e56f11dc96
-					$('#select_order_1_1').append($('<option>', { 
-						text: items[i],
-					}));
-				};
-			}
-		});
+				$.each(items, function (i, item) { //Working! Which one is better?
+					if(item !=""){
+						// alert("0" + item + "0");
+						$('#select_order_1_1').append($('<option>', { 
+							text: item,
+						}));
+					}
+				});
+		}});
 
 	$.ajax({
 		url: '/php/order_counter.php',
@@ -163,10 +140,13 @@ $("#select_city").change(function() {
 			$input.attr('max', resp);
 		}
 	});
-
 });
 
+$("add_point").click(function() {
+	var countPoint = $("panel_wrap").children('.panel_point').length;
 
+
+});
 
 
 // function animation_show(that, number){	//TODO one day we will have shiny animtions
