@@ -70,17 +70,34 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 }
 
-$("#select_city").ready(function(){ //creating combobox on ready
+// $("#select_city").ready(function(){ //creating combobox on ready
+// 	$.ajax({						//working with php script
+// 		url: 'php/Select_city.php',
+// 		type: 'get',
+// 		dataType: 'html',
+// 		success: function(data){
+// 			var $response = $(data);
+// 			$("#select_city").append($(data));
+// 		}
+// 	}).done(function(){
+// 		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
+// 	})
+// });
+
+//TODO GET THE EVENT FUCKING TRIGGER FFS
+$(".select_city").ready(function(event){ //creating combobox on ready
 	$.ajax({						//working with php script
 		url: 'php/Select_city.php',
 		type: 'get',
 		dataType: 'html',
 		success: function(data){
+			var target = $(event.target);
+			alert(target.id);
 			var $response = $(data);
-			$("#select_city").append($(data));
+			$(event.target).append($(data));
 		}
 	}).done(function(){
-		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
+		$(event.target).trigger("change"); //call change after ajax is done. Change is working with small combos in order
 	})
 });
 
@@ -104,7 +121,7 @@ $("#select_city").change(function() {
 			});		
 		}
 
-				 var items = resp.split("\n");
+				var items = resp.split("\n");
 				// $.each(items, function (i, item) { //Working! Which one is better?
 				// 	if(item !=""){
 				// 		alert("0" + item + "0");
