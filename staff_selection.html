@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<title>Корпоративная Информационная Система - Выбор Состава</title>
 	<script src="js/jquery-3.2.0.min.js"></script>
+	<script src="js/staff_selection.js"></script>
 	<script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
 
 	<!-- Latest compiled and minified CSS -->
@@ -34,7 +35,7 @@
 		#crew {
 			width: 100%;
 			min-width: 100%;
-			min-height: 50px;
+			min-height: 50px;Ы
 		}
 
 	</style>
@@ -43,54 +44,22 @@
 
 
 
-<body>
-	
+<body>	
 	<h1>КИС - Транспортная компания.<small>Отдел Эксплуатации - Выбор состава экипажа</small></h1>
 
 <div class="panel_crew">
 	<h3>Сущетсвующие экипажи</h3>
-	<select  id="crew">
-		<option>-----------------------------------</option>
-			<script>
-				$("#crew").ready(function() {
-				$.ajax({
-					url: 'php/fill_crew.php',
-							success: function(resp) //TODO: get rid of freakin empty string at the end of items (look 4 split problems)
-					{
-						$("#crew option").each(function() {
-							$(this).remove();
-						});
-							var items = resp.split("\n");
-							for (var i = items.length - 2; i >= 0; i--) {	//temporary solution
-								$('#crew').append($('<option>', { 
-									text: items[i],
-								}));
-							};
-						}
-					})
-				.done(function(){
-					$("#crew").trigger("change");
-				})
-			});
-				$('#crew').change(function(){
-					var str = $('#crew option:selected').text().split('-');
-					$('#Driver_1').val(str[0].trim());
-					$('#Driver_2').val(str[1].trim());
-					$('#Tractor').val(str[2].trim());
-					$('#Trailer').val(str[3].trim());
-			});
-			</script>
-	</select>
-
+	<form id="x_form" method="POST" action="php/staff_button.php">
+	<select id="crew"></select>
 	<div style="margin-top: 50px;">
-		<h3>Первый водитель</h3> <input type="text" id ="Driver_1">
-		<h3>Второй водитель</h3> <input type="text" id="Driver_2">
-		<h3>Тягач</h3> <input type="text" id="Tractor">
-		<h3>Прицеп</h3> <input type="text" id="Trailer">
+		<h3>Первый водитель</h3> <select id ="Driver_1" name="Driver_1"></select>
+		<h3>Второй водитель</h3> <select id="Driver_2" name="Driver_2"></select>
+		<h3>Тягач</h3> <select id="Tractor" name="Tractor"></select>
+		<h3>Прицеп</h3> <select id="Trailer" name="Trailer"></select>
 	</div>
 
-	<button class="btn btn-primary" style="width: 100%; margin-top: 50px; height: 50px">Составить экипаж и перейти к построению маршрута</button>
+	<input type="submit" name="staff_butt" value="Составить экипаж и перейти к построению маршрута" class="btn btn-primary" style="width: 100%; margin-top: 50px; height: 50px"></button>
+	</form>
 </div>
-
 </body>
 </html>

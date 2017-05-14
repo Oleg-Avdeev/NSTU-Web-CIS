@@ -1,9 +1,7 @@
 <?php 
 require_once('connect.php'); 
-$dbh = connect(); 
-$query = "SELECT * FROM Place"; 
-$res = mysqli_query($dbh,$query); 
-
-while ($row = mysqli_fetch_array($res)) { 
+$pdo = connect(); 
+$stmt = $pdo->query("SELECT * FROM Place"); 
+while ($row = $stmt->fetch()) { 
 echo "<option>" .$row['Name']. "</option>"; 
 }?>
