@@ -70,36 +70,36 @@ function quantity_handler(that){	//event handler for checkboxes
 	}
 }
 
-// $("#select_city").ready(function(){ //creating combobox on ready
-// 	$.ajax({						//working with php script
-// 		url: 'php/Select_city.php',
-// 		type: 'get',
-// 		dataType: 'html',
-// 		success: function(data){
-// 			var $response = $(data);
-// 			$("#select_city").append($(data));
-// 		}
-// 	}).done(function(){
-// 		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
-// 	})
-// });
-
-//TODO GET THE EVENT FUCKING TRIGGER FFS
-$(".select_city").ready(function(event){ //creating combobox on ready
+$("#select_city").ready(function(){ //creating combobox on ready
 	$.ajax({						//working with php script
 		url: 'php/Select_city.php',
-		type: 'POST',
-		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
+		type: 'get',
+		dataType: 'html',
 		success: function(data){
-			var target = $(event.target);
-			// alert(target.id);
 			var $response = $(data);
-			$(event.target).append($(data));
+			$("#select_city").append($(data));
 		}
 	}).done(function(){
-		$(event.target).trigger("change"); //call change after ajax is done. Change is working with small combos in order
+		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
 	})
 });
+
+//TODO GET THE EVENT FUCKING TRIGGER FFS
+// $(".select_city").ready(function(event){ //creating combobox on ready
+// 	$.ajax({						//working with php script
+// 		url: 'php/Select_city.php',
+// 		type: 'POST',
+// 		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
+// 		success: function(data){
+// 			var target = $(event.target);
+// 			// alert(target.id);
+// 			var $response = $(data);
+// 			$(event.target).append($(data));
+// 		}
+// 	}).done(function(){
+// 		$(event.target).trigger("change"); //call change after ajax is done. Change is working with small combos in order
+// 	})
+// });
 
 $("#select_city").change(function() {
 	$.ajax({
@@ -114,11 +114,11 @@ $("#select_city").change(function() {
 		//TODO: upload data to ALL load/unload combos, get custom creations for ALL load/unload combos (put options from db)
 		var children = $("#load_inner_1").children().length; 		//number of children (inputs)
 			for (var i = 1; i <= (children); i++) {					// showing from number to total count	
-			$("#select_order_1_" + i +" option").each(function() {
+				$("#select_order_1_" + i +" option").each(function() {
 				$(this).remove();	// removing i-th options
 			});		
-		}
-				var items = resp.split("\n");
+			}
+			var items = resp.split("\n");
 				$.each(items, function (i, item) { //Working! Which one is better?
 					if(item !=""){
 						// alert("0" + item + "0");
@@ -127,14 +127,13 @@ $("#select_city").change(function() {
 						}));
 					}
 				});
-		}});
+			}});
 
 	$.ajax({
-		url: '/php/order_counter.php',
+		url: 'php/order_counter.php',
 		type: 'POST',
 		dataType: 'text',
 		data: {gorod: $('#select_city option:selected').text()},
-
 		success: function(resp){
 			$input = $("#load_inner");
 			$input.attr('max', resp);
