@@ -1,3 +1,36 @@
+///////////////////////////////////////////////todo mega object parse
+function Point($point) 
+{ 
+	alert($point.attr('class'));
+	$combo1 = $point.find('#select_city');
+	// $combo1 = $point.children('#select_city'); 
+	alert("combo1 - " + $combo1.attr('id'));
+	$combo2 = $point.children('#combo2');
+	$($combo1).change(function(event) { 
+		alert("Inner handler on combo 1"); 
+	}); 
+}
+
+var points = [];
+
+// &&&&&
+$().ready(function() {
+	var $object = $('#panel_wrap div:first-child');	
+	var point = new Point($object); 
+	$(point.combo2).change(function(event) { 
+	alert("Outer handler on combo 2");
+
+	// $(".panel_point").each(function(event) {
+	// 	var $object  = this;
+	// 	var point = new Point($object); 
+	// 	$(point.combo2).change(function(event) { 
+
+	// 		alert("Outer handler on combo 2"); 
+	// 	}); 
+	});
+});
+//////////////////////////////////////////////
+
 $(".checkbox").change(function() { //event catcher on change checkboxes for fade/show div's 
 	checkbox_handle(this);
 });
@@ -141,12 +174,12 @@ $("#select_city").change(function() {
 	});
 });
 
-$("add_point").click(function() {
-	var countPoint = $("panel_wrap").children('.panel_point').length;
+$("#add_point").click(function() {
+	var countPoint = $("#panel_wrap").children('.panel_point').length;
+	alert(countPoint);
 
 
 });
-
 
 // function animation_show(that, number){	//TODO one day we will have shiny animtions
 	
