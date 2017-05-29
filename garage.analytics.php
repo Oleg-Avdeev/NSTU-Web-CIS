@@ -41,8 +41,8 @@ a.ID `ID`,
 a.Serial_number_tractor `SERIAL_NUMBER`,
 a.Sign `SIGN`,
 b.Model `MODEL`
-FROM tractor a
-INNER JOIN tractor_model b ON (b.ID_model=a.ID_model)');
+FROM Tractor a
+INNER JOIN Tractor_model b ON (b.ID_model=a.ID_model)');
 $q->execute();
 $arr = array();
 while ($a = $q->fetch(PDO::FETCH_ASSOC)){
