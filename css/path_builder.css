@@ -18,6 +18,7 @@
 		margin-left: 10%;
 		margin-right: 10%;
 		background-color: #FFFFFF;
+		display: none; /*starting object hell*/
 
 		padding: 10px;
 		border-radius: 10px;
@@ -29,7 +30,9 @@
 		margin-right: 10%; 
 		margin-top: 25px; 
 		margin-bottom: 25px; 
+		display: none; /*starting object hell*/
 		/*background-color: #FAA;*/ 
+
 		text-align: left;
 	}
 

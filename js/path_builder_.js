@@ -2,12 +2,15 @@
 function Point($point) 
 { 
 	this.$divPoint = $point;
+	// alert($point);
 	$point.slideDown("fast", "swing");
 	this.comboCity = $point.find('#select_city');
 	this.comboLoad = $point.find('.select_order_load');//mb it should be array?
-	// alert("comboLoad - " + $comboLoad.attr('id'));
+	// alert("comboLoad - " + this.$comboLoad.attr('id'));
 	this.comboUnload = $point.find('#select_order_unload_1_1');
-	// alert("comboUnLoad - " + $comboUnload.attr('id'));
+	// alert("checkLoad - " + comboUnload.attr('id'));
+	this.checkLoad = $point.find('#load.checkbox');
+	// alert("checkLoad - " + this.checkLoad.attr('id'));
 	$(this.comboCity).change(function(event) { 
 		// alert("Inner handler on combo 1"); 
 	}); 
@@ -20,12 +23,9 @@ var points = [];
 
 // &&&&&
 $().ready(function() {
-	var $object = $('#panel_wrap div:first-child');	
-	points[0] = new Point($object);
-	// $startingPoint = points[0]; // need to clone? My copy of the first element, which im adding
-	$startingPoint = points[0].$divPoint.clone();
-	// var startingPoint = $.extend(true, {}, points[0]);
-	
+	var $object = $('#panel_point');	
+	$startingPoint = new Point($object);
+	points[0] = $startingPoint; // need to clone? My copy of the first element, which im adding
 	$(points[0].combo2).change(function(event) { 
 	alert("Outer handler on combo 2");
 
@@ -122,7 +122,7 @@ $("#select_city").ready(function(){ //creating combobox on ready
 			$("#select_city").append($(data));
 		}
 	}).done(function(){
-		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order	
+		$("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
 	})
 });
 
@@ -184,22 +184,13 @@ $("#select_city").change(function() {
 });
 
 $("#add_point").click(function() {//button that is addnig points
-	var countPoint = $("#panel_wrap").children('.panel_point').length;
-	// alert(points[0].comboCity.attr('id'));
-	// alert("startingPoint id - " + $startingPoint.$divPoint.attr('class'));
-	// alert($startingPoint.attr('class'));
+	$currentPoint = $startingPoint.$divPoint.clone();
+	points.push($currentPoint);
+	$currentPoint.hide();
+	$currentPoint.appendTo('#panel_wrap');
+	$('#panel_wrap .panel_point:last-child').slideDown("fast", "swing");
 
-	points[1] = new Point($startingPoint.clone());
-	alert(points[1].$divPoint.attr('class'));
-	points[1].$divPoint.appendTo('#panel_wrap');
-
-
-	// $('#panel_wrap').append('<div class="panel_point"></div>')
-	// $('#panel_wrap .panel_point:last-child').html($startingPoint.$divPoint.clone());
-
-	// $('#panel_wrap').html($startingPoint.$divPoint.clone());
-	// $('#panel_wrap').append($startingPoint.$divPoint.clone());
-	// $('#panel_wrap .panel_point:last-child').slideDown("fast", "swing");// PROBLEM i suppose. append works twice, i think here is a problem
+	alert(points.length-1);
 });
 
 // function animation_show(that, number){	//TODO one day we will have shiny animtions
