@@ -1,5 +1,6 @@
 function Point($point) //MEGA OBJECT SYSTEM
 { 
+	//elements
 	this.$divPoint = $point; //self link
 	// alert($point);
 	$point.slideDown("fast", "swing");//show element
@@ -7,12 +8,23 @@ function Point($point) //MEGA OBJECT SYSTEM
 	this.comboCity = $point.find('#select_city');
 	this.comboLoad = $point.find('.select_order_load');//mb it should be array?
 	this.comboUnload = $point.find('#select_order_unload_1_1');
+
+	this.comboInnerLoad = $point.find('div#load_inner');
+	this.comboInnerUnload = $point.find('div#unload_inner');
+
+	this.divQuantityLoad = $point.find('div.quantityLoad');
+	this.divQuantityUnload = $point.find('div.quantityUnload');
 	// this.checkbox = $point.find('.checkbox'); idk
 	this.checkLoad = $point.find('#load.checkbox');
 	this.checkUnload = $point.find('#unload.checkbox');
 
+	//handlers
 	$($point.find('.checkbox')).change(function() {//event catcher on change checkboxes for fade/show div's 
 		checkbox_handle(this, $point);
+	});
+
+	$($point.find('.quantity')).on('change keyup paste mouseup', function() {
+		quantity_prehandler(this, $point);
 	});
 
 	// alert("checkUnload - " + this.checkUnload.attr('id'));
@@ -33,7 +45,7 @@ $().ready(function() {
 	// alert('extend gives me this - ' + startingPoint.divPoint);
 	
 	$(points[0].combo2).change(function(event) { 
-	alert("Outer handler on combo 2");
+		alert("Outer handler on combo 2");
 	});
 });
 
@@ -45,7 +57,6 @@ function checkbox_handle(that, _point){	//event handler for checkboxes for fade/
 	var element_id = "#"+$(that).attr("id")+"_div"; //get that_name of div that depends on checkbox that_name (because i cannot do it better)
 	// STILL DONT KNOW, well i kind know but im afrid that all other stuff will crumble
 	var _div = _point.find(element_id);
-	// alert("what i found " + _div.attr('id'));
 	
 	if(that.checked) { 		
     	$(_div).fadeIn("fast","swing");	//animations
@@ -60,25 +71,28 @@ function checkbox_handle(that, _point){	//event handler for checkboxes for fade/
 //	The better way to implement catching this event
 // 	"Don't blame the player, blame the game".
 var lastQuatityValue = [1, 1]; //an array because life is hard
-$(".quantity").on('change keyup paste mouseup', function() {
-	var name = $(this).attr('id');
+function quantity_prehandler(that, _point){
+	var name = $(that).attr('id');
 	var QuatityIndex = 0;
 	if (name == "unload_div") QuatityIndex = 1;
 
-	if ($(this).val() != lastQuatityValue[QuatityIndex]) {
-		lastQuatityValue[QuatityIndex] = $(this).val();
-		quantity_handler(this);
+	if ($(that).val() != lastQuatityValue[QuatityIndex]) {
+		lastQuatityValue[QuatityIndex] = $(that).val();
+		quantity_handler(that, _point);
 	}
-});
+}
 
-function quantity_handler(that){	//event handler for checkboxes
-	var name = $(that).attr('id');
-	var that_name ="#" + name + "_1";
-	// alert("that_name " + that_name);
-	var children = $(that_name).children().length; //number of children (inputs)
-	var number = $(that).val();	
+function quantity_handler(that, _point){	//event handler for checkboxes
+	var name = '#'+$(that).attr('id');
+	// var that_name ="#" + name + "_1";
 
-	if (number <= 0){ //check if number is in our diprosone
+	var _div_inner = _point.find('div'+name);//find div in point that contains trigger
+	// alert ('_div_inner id = ' + _div_inner.attr('id'));
+
+	var children = _div_inner.children().length; //number of children (inputs)
+	var number = $(that).val();
+
+	if (number <= 0){ //check if number is in our dioposone
 		number = 1;
 		$(that).val(number);
 	}
@@ -91,21 +105,21 @@ function quantity_handler(that){	//event handler for checkboxes
 
 	if (number > children){	
 		for (var i = 1; i <= (number-children); i++) { //crete order
-			if (name == "load_inner"){
-				$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select id =select_order_"+1+"_"+parseInt(children+i)+"> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Погрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			if (name == "#load_inner"){
+				_point.find('div.quantityLoad:first').clone().hide().appendTo(_div_inner);
 			}
-			else if (name == "unload_inner"){//that "style=\"display: none;\"" is really important becouse i want smooth animation on parent
-			$(that_name).append("<div class=\"quantityLoad\" style=\"display: none;\"> Заказ : <select id =select_order_"+1+"_"+parseInt(children+i)+"> <option>a12312123</option> <option>b</option> <option>c</option> </select> :: Разгрузить : <input type=\"number\" id = \"quantityLoad_"+1+"_"+children+i+"\" that_name=\"quantityLoad\" min=\"1\" max=\"8\"></div>");
+			else if (name == "#unload_inner"){//that "style=\"display: none;\"" is really important becouse i want smooth animation on parent
+				_point.find('div.quantityUnload:first').clone().hide().appendTo(_div_inner);
 		}
 
-			$(that_name+" div:last-child").slideDown("fast", "swing");//that is a key to parent smooth animation.
+			$(name+" div:last-child").slideDown("fast", "swing");//that is a key to parent smooth animation.
 			//I really do fcking need to hide elements first and then show them one by one
 		}
 	}
 	else
 	{
 		for (var i = number; i < (children); i++) {							// deleting from number to total count	
-			$(that_name).children().eq(i).slideUp("fast", "swing", function(){ // animating i-th child
+			_div_inner.children().eq(i).slideUp("fast", "swing", function(){ // animating i-th child
 					$(this).remove(); 										// removing animated child
 				});
 		}
