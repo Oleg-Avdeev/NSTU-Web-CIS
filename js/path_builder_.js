@@ -1,59 +1,59 @@
-///////////////////////////////////////////////todo mega object parse
-function Point($point) 
+function Point($point) //MEGA OBJECT SYSTEM
 { 
-	this.$divPoint = $point;
+	this.$divPoint = $point; //self link
 	// alert($point);
-	$point.slideDown("fast", "swing");
+	$point.slideDown("fast", "swing");//show element
+	//search for elements i need
 	this.comboCity = $point.find('#select_city');
 	this.comboLoad = $point.find('.select_order_load');//mb it should be array?
-	// alert("comboLoad - " + this.$comboLoad.attr('id'));
 	this.comboUnload = $point.find('#select_order_unload_1_1');
-	// alert("checkLoad - " + comboUnload.attr('id'));
+	// this.checkbox = $point.find('.checkbox'); idk
 	this.checkLoad = $point.find('#load.checkbox');
-	// alert("checkLoad - " + this.checkLoad.attr('id'));
+	this.checkUnload = $point.find('#unload.checkbox');
+
+	$($point.find('.checkbox')).change(function() {//event catcher on change checkboxes for fade/show div's 
+		checkbox_handle(this, $point);
+	});
+
+	// alert("checkUnload - " + this.checkUnload.attr('id'));
 	$(this.comboCity).change(function(event) { 
 		// alert("Inner handler on combo 1"); 
 	}); 
-
-	this.I =5;
 }
 
 $startingPoint ={};
 var points = [];
 
-// &&&&&
 $().ready(function() {
 	var $object = $('#panel_point');	
 	$startingPoint = new Point($object);
 	points[0] = $startingPoint; // need to clone? My copy of the first element, which im adding
+	// points[0] = new Point($object);
+	// var startingPoint = $.extend(true, {}, points[0]);
+	// alert('extend gives me this - ' + startingPoint.divPoint);
+	
 	$(points[0].combo2).change(function(event) { 
 	alert("Outer handler on combo 2");
-
-	// $(".panel_point").each(function(event) {
-	// 	var $object  = this;
-	// 	var point = new Point($object); 
-	// 	$(point.combo2).change(function(event) { 
-
-	// 		alert("Outer handler on combo 2"); 
-	// 	}); 
 	});
 });
-//////////////////////////////////////////////
 
-$(".checkbox").change(function() { //event catcher on change checkboxes for fade/show div's 
-	checkbox_handle(this);
-});
+// $(".checkbox").change(function() { //event catcher on change checkboxes for fade/show div's 
+// 	checkbox_handle(this);
+// });
 
-function checkbox_handle(that){	//event handler for checkboxes for fade/show div's 
+function checkbox_handle(that, _point){	//event handler for checkboxes for fade/show div's 
 	var element_id = "#"+$(that).attr("id")+"_div"; //get that_name of div that depends on checkbox that_name (because i cannot do it better)
-	var parent =  $(element_id).parent();
+	// STILL DONT KNOW, well i kind know but im afrid that all other stuff will crumble
+	var _div = _point.find(element_id);
+	// alert("what i found " + _div.attr('id'));
+	
 	if(that.checked) { 		
-    	$(element_id).fadeIn("fast","swing");	//animations
+    	$(_div).fadeIn("fast","swing");	//animations
     	// animation_show($(element_id), 0); //TODO animtions
     }
     else
     {
-    	$(element_id).fadeOut("fast", "swing");
+    	$(_div).fadeOut("fast", "swing");
     }
 }
 
@@ -126,23 +126,6 @@ $("#select_city").ready(function(){ //creating combobox on ready
 	})
 });
 
-//TODO GET THE EVENT FUCKING TRIGGER FFS
-// $(".select_city").ready(function(event){ //creating combobox on ready
-// 	$.ajax({						//working with php script
-// 		url: 'php/Select_city.php',
-// 		type: 'POST',
-// 		dataType: 'html',/*default: Intelligent Guess (Other values: xml, json, script, or html)*/
-// 		success: function(data){
-// 			var target = $(event.target);
-// 			// alert(target.id);
-// 			var $response = $(data);
-// 			$(event.target).append($(data));
-// 		}
-// 	}).done(function(){
-// 		$(event.target).trigger("change"); //call change after ajax is done. Change is working with small combos in order
-// 	})
-// });
-
 $("#select_city").change(function() {
 	$.ajax({
 		method: 'POST',
@@ -185,12 +168,15 @@ $("#select_city").change(function() {
 
 $("#add_point").click(function() {//button that is addnig points
 	$currentPoint = $startingPoint.$divPoint.clone();
-	points.push($currentPoint);
+
 	$currentPoint.hide();
 	$currentPoint.appendTo('#panel_wrap');
+	$currentObject = new Point($('#panel_wrap .panel_point:last-child'));//do i relly want to go this way again? Children bit me once
+	//works this time me i guess
+	points.push($currentObject);
 	$('#panel_wrap .panel_point:last-child').slideDown("fast", "swing");
 
-	alert(points.length-1);
+	// alert(points.length-1);
 });
 
 // function animation_show(that, number){	//TODO one day we will have shiny animtions
