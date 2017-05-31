@@ -54,7 +54,7 @@
 			<a class="boxclose" id="boxclose"></a> <!-- X close -->
 		</div>
 
-		<div class="panel_path" id="path_1">
+		<div class="panel_path" id="path">
 			<h3>Перегон - <small>Петропавловск Камчатский - Калининград </small></h3>
 			<p>Дистанция между пунктами: 1230км</p>
 			<p>Вес груза: 25т</p>
@@ -64,59 +64,9 @@
 			<p>Перечень груза:</p>
 		</div>
 
-		<!-- <div class="panel_point"> 
-
-			<div class="block">
-				<p> 
-					<h2>Пункт - <small>Выбор пункта:
-						<select>
-							<option>a</option>
-							<option>b</option>
-							<option>c</option>
-						</select>
-					</small>
-				</h2>
-
-				<h3>
-					<input type="checkbox" id ="unload" class="checkbox" name="unload"/> <small>Разгрузка</small> ::
-					<input type="checkbox" id="load" class="checkbox" name="load"/> <small>Погрузка</small>
-				</h3>
-			</p>
-		</div>
-
-		<div id="unload_div" class="block" style ="display:none">
-			<p>
-				<h3>Погрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="1" max="15" min = "1" value="1"></small></h3>
-			</p>
-			<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-				:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
-
-				<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-					:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
-
-					<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-						:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
-
-						<div> Заказ : <select> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-							:: Погрузить : <input type="number" name="quantityLoad" min="1" max="8"></div>
-						</div>
-
-						<div id="load_div" class="block" style ="display:none">
-							<h3>Разгрузка - <small> Количество: <input type="number" class="quantity" id = "multi" size="2" max="15" min = "1" value="1"></small></h3>
-						</p>
-						<select>
-							<option>a</option>
-							<option>b</option>
-							<option>c</option>
-						</select>
-						<input type="number" name="quantityUnload" min="1" max="8">
-					</div>
-					<a class="boxclose" id="boxclose"></a> 
-				</div>
-			</div> -->
 		</div>
 		<div style="width: 60%; margin-right: 15%; margin-left: 15%; margin-top: 25px; text-align: center;">
-			<button type="button" class="btn btn-default" id="add_point" style="width: 40%">Добавить Точку</button>
+			<button type="button" class="btn btn-default" id="add_point" style="width: 40%; display: none;">Добавить Точку</button>
 		</div>
 
 		<script src="js/path_builder_.js"></script>
