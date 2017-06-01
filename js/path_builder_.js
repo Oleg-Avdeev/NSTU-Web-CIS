@@ -171,6 +171,9 @@ $("#select_city").ready(function(){ //creating combobox on ready
 		// City_handler()
 		// $("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
 		City_handler(this, points[0].$divPoint);
+		alert('now');
+		// $('.checkbox').css("display", "inline");
+		$('.checkbox').fadeIn("fast", "swing");
 		$('#add_point').fadeIn("fast", "swing");
 	})
 });
