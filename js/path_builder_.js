@@ -108,10 +108,10 @@ function Quantity_prehandler(that, _point){
 	var QuatityIndex = 0;
 	if (name == "unload_inner") QuatityIndex = 1;
 
-	if ($(that).val() != lastQuatityValue[QuatityIndex]) {;
+	// if ($(that).val() != lastQuatityValue[QuatityIndex]) {;
 		lastQuatityValue[QuatityIndex] = $(that).val();
 		Quantity_handler(that, _point);
-	}
+	// }
 }
 
 function Quantity_handler(that, _point){	//event handler for checkboxes
