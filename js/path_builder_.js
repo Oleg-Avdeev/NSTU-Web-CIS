@@ -104,10 +104,11 @@ function Checkbox_handle(that, _point){	//event handler for checkboxes for fade/
 var lastQuatityValue = [1, 1]; //an array because life is hard
 function Quantity_prehandler(that, _point){
 	var name = $(that).attr('id');
-	var QuatityIndex = 0;
-	if (name == "unload_div") QuatityIndex = 1;
 
-	if ($(that).val() != lastQuatityValue[QuatityIndex]) {
+	var QuatityIndex = 0;
+	if (name == "unload_inner") QuatityIndex = 1;
+
+	if ($(that).val() != lastQuatityValue[QuatityIndex]) {;
 		lastQuatityValue[QuatityIndex] = $(that).val();
 		Quantity_handler(that, _point);
 	}
@@ -115,10 +116,7 @@ function Quantity_prehandler(that, _point){
 
 function Quantity_handler(that, _point){	//event handler for checkboxes
 	var name = '#'+$(that).attr('id');
-	// var that_name ="#" + name + "_1";
-
 	var _div_inner = _point.find('div'+name);//find div in point that contains trigger
-	// alert ('_div_inner id = ' + _div_inner.attr('id'));
 
 	var children = _div_inner.children().length; //number of children (inputs)
 	var number = $(that).val();
@@ -168,12 +166,10 @@ $("#select_city").ready(function(){ //creating combobox on ready
 			$("#select_city").append($(data));
 		}
 	}).done(function(){
-		// City_handler()
-		// $("#select_city").trigger("change"); //call change after ajax is done. Change is working with small combos in order
 		City_handler(this, points[0].$divPoint);
-		alert('now');
-		// $('.checkbox').css("display", "inline");
+		//^call City_handler after ajax is done. City_handler is working with small combos in order
 		$('.checkbox').fadeIn("fast", "swing");
+		//^prevent actions before ajax is done. U cant click if u cant see wht to click :smart:
 		$('#add_point').fadeIn("fast", "swing");
 	})
 });
@@ -223,9 +219,25 @@ function City_handler(that, _point){
 		data: {gorod: $('#select_city option:selected').text()},
 		success: function(resp){
 			$input = $("#load_inner");
+			//TODO $input = $("#unload_inner");
 			$input.attr('max', resp);
 		}
 	});
+}
+
+function Point_clear(_point){
+	$(_point).find('.checkbox').each(function(i, el) {
+		$(el).prop('checked', false);
+		Checkbox_handle($(el),_point);
+	});
+	
+	$(_point).find('#load_inner').val("1");
+	$(_point).find('#unload_inner').val("1");
+	
+	Quantity_prehandler($(_point).find('#load_inner'),_point);
+	Quantity_prehandler($(_point).find('#unload_inner'),_point);
+
+	City_handler($(_point).find('#select_city'),_point);
 }
 
 $("#add_point").click(function() {//button that is addnig points
@@ -237,6 +249,8 @@ $("#add_point").click(function() {//button that is addnig points
 	//^works this time i guess
 	points.push($currentObject);
 	Pathways_handler();//only there after point pushed
+	// alert("addpoint.click current object = " + points[points.length-1].$divPoint.attr('id'));
+	Point_clear(points[points.length-1].$divPoint);//reset object to blank (apart from ajax)
 	$('#panel_wrap .panel_point:last-child').slideDown("fast", "swing");
 
 	// alert(points.length-1);
