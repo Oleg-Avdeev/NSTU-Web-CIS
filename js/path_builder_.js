@@ -219,7 +219,7 @@ function City_handler(that, _point){
 		data: {gorod: $('#select_city option:selected').text()},
 		success: function(resp){
 			$input = $("#load_inner");
-			//TODO $input = $("#unload_inner");
+			$input = $("#unload_inner");
 			$input.attr('max', resp);
 		}
 	});
