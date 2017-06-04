@@ -1,21 +1,25 @@
-function Point($point) //point object (class)
+function Point($point, ind) //point object (class)
 { 
 	//elements
 	this.$divPoint = $point; //self link
 	$point.slideDown("fast", "swing");//show element
 	//search for elements i need
-	this.comboCity = $point.find('#select_city');
-	this.comboLoad = $point.find('.select_order_load');//mb it should be array?
-	this.comboUnload = $point.find('#select_order_unload_1_1');
+	this.$comboCity = $point.find('#select_city');
+	this.$comboLoad = $point.find('.select_order_load');//mb it should be array?
+	this.$comboUnload = $point.find('#select_order_unload_1_1');
 
-	this.comboInnerLoad = $point.find('div#load_inner');
-	this.comboInnerUnload = $point.find('div#unload_inner');
+	this.$inputInnerLoad = $point.find('input#load_inner');
+	this.$inputInnerUnload = $point.find('input#unload_inner');
 
-	this.divQuantityLoad = $point.find('div.quantityLoad');
-	this.divQuantityUnload = $point.find('div.quantityUnload');
+	this.$divQuantityLoad = $point.find('div.quantityLoad');
+	this.$divQuantityUnload = $point.find('div.quantityUnload');
+
+	this.$inputQuantityInner = $point.find('input.quantity_inner');
 	// this.checkbox = $point.find('.checkbox'); idk
-	this.checkLoad = $point.find('#load.checkbox');
-	this.checkUnload = $point.find('#unload.checkbox');
+	this.$checkLoad = $point.find('#load.checkbox');
+	this.$checkUnload = $point.find('#unload.checkbox');
+
+	this.$index = ind;
 
 	//handlers
 	$($point.find('.checkbox')).change(function() {//event catcher on change checkboxes for fade/show div's 
@@ -30,7 +34,7 @@ function Point($point) //point object (class)
 
 	// $(this.comboCity).ready(function($) {});
 
-	$(this.comboCity).change(function(event) { 
+	$(this.$comboCity).change(function(event) { 
 		City_handler(this, $point);
 	}); 
 
@@ -38,7 +42,15 @@ function Point($point) //point object (class)
 
 function Path($path){ //path point object
 	this.$pathPoint = $path;
-	// $path.slideDown("fast", "swing");//show element
+
+	this.$cities = $path.find(".city");
+	this.$distance = $path.find('#distance');
+	// alert("distance path= " + this.$distance.attr('id'));
+
+	this.$mass = $path.find('#mass');
+	this.$full_mass = $path.find('#full_mass');
+	this.$consumption = $path.find('#consumption');
+	this.$full_consumption = $path.find('#full_consumption');
 }
 
 $startingPoint ={};
@@ -49,7 +61,7 @@ var pathways = [];
 $().ready(function() {
 	var $point = $('#panel_point');	
 	var $path = $('#path');
-	$startingPoint = new Point($point);
+	$startingPoint = new Point($point, points.length);
 	points[0] = $startingPoint; // need to deep clone by hand
 
 	$startingPath = new Path($path);
@@ -57,7 +69,7 @@ $().ready(function() {
 	// alert('pathways[0] = ' + pathways[0].$pathPoint.attr('id'));
 	// pathways.push($startingPath.clone()); dosent work clone idk
 
-	// points[0] = new Point($object);
+	// points[0] = new Point($objec, points.length-1t);
 	// var startingPoint = $.extend(true, {}, points[0]);
 	// alert('extend gives me this - ' + startingPoint.divPoint);
 	
@@ -73,15 +85,40 @@ function Pathways_handler(){
 	
 	pathways[pathways.length-1].$pathPoint.slideDown("fast", "swing");//show previous one
 
-	// $currentObject = new Point(pathways[pathways.length-1].$pathPoint);
 	$tryobject = $('#panel_wrap .panel_path:last-child');
-	$currentObject = new Path($tryobject);
+	var $currentObject = new Path($tryobject);
+
+	// $currentObject.$distance.text('SMOrc');
 
 	// $newPath = new Path($startingPath);//works this time i guess
 	// alert('newpath = ' + $newPath.pathPoint.attr('id'));
 	pathways.push($currentObject);//TODO overload clone
 	// alert('pathPoint[pathPoint.length-1] = ' + pathways[pathways.length-1].$pathPoint);
 	// $newPath.appendTo('#panel_wrap');
+}
+
+function Constr(_point, i){
+	// $(".city1").empty();
+	// $(".city2").empty();
+	// $(".city1").append($('#select_city option:selected').text());
+	// $(".city2").append($('#select_city_on option:selected').text());
+	// if(distance != ""){ $(".distance").empty(); $(".distance").append(distance);}
+	// if(mass != ""){$(".mass").empty(); $(".mass").append(mass);}
+	// if(full_mass != ""){$(".full_mass").empty(); $(".full_mass").append(full_mass);}
+	// if(consumption != ""){$(".consumption").empty(); $(".consumption").append(consumption);}
+	// if(full_consumption != ""){$(".full_consumption").empty(); $(".full_consumption").append(full_consumption);}
+
+	pathways[i].$distance.empty();
+
+
+	_point[i].append($('#select_city option:selected').text());
+	_point[i+1].append($('#select_city option:selected').text());
+
+	if(distance != ""){ $(".distance").empty(); $(".distance").append(distance);}
+	if(mass != ""){$(".mass").empty(); $(".mass").append(mass);}
+	if(full_mass != ""){$(".full_mass").empty(); $(".full_mass").append(full_mass);}
+	if(consumption != ""){$(".consumption").empty(); $(".consumption").append(consumption);}
+	if(full_consumption != ""){$(".full_consumption").empty(); $(".full_consumption").append(full_consumption);}
 }
 
 function Checkbox_handle(that, _point){	//event handler for checkboxes for fade/show div's 
@@ -226,18 +263,31 @@ function City_handler(that, _point){
 }
 
 function Point_clear(_point){
-	$(_point).find('.checkbox').each(function(i, el) {
-		$(el).prop('checked', false);
-		Checkbox_handle($(el),_point);
-	});
-	
-	$(_point).find('#load_inner').val("1");
-	$(_point).find('#unload_inner').val("1");
-	
-	Quantity_prehandler($(_point).find('#load_inner'),_point);
-	Quantity_prehandler($(_point).find('#unload_inner'),_point);
 
-	City_handler($(_point).find('#select_city'),_point);
+	_point.$checkLoad.prop('checked', false);
+	_point.$checkUnload.prop('checked', false);
+
+	Checkbox_handle(_point.$checkLoad, _point.$divPoint);
+	Checkbox_handle(_point.$checkUnload, _point.$divPoint);
+
+	_point.$inputInnerLoad.val("1");
+	_point.$inputInnerUnload.val("1");
+
+	Quantity_prehandler(_point.$inputInnerLoad, _point.$divPoint);
+	Quantity_prehandler(_point.$inputInnerUnload, _point.$divPoint);
+
+	City_handler(_point.$comboCity,_point.$divPoint);
+
+	_point.$inputQuantityInner.val("");
+}
+
+function dump(obj) {//developing tool FTW
+    var out = '';
+    for (var i in obj) {
+        out += i + ": " + obj[i] + "\n";
+    }
+
+    alert(out);
 }
 
 $("#add_point").click(function() {//button that is addnig points
@@ -245,15 +295,13 @@ $("#add_point").click(function() {//button that is addnig points
 
 	$currentPoint.hide();
 	$currentPoint.appendTo('#panel_wrap');
-	$currentObject = new Point($('#panel_wrap .panel_point:last-child'));//do i relly want to go this way again? Children bit me once
+
+	$currentObject = new Point($('#panel_wrap .panel_point:last-child'), points.length);//do i relly want to go this way again? Children bit me once
 	//^works this time i guess
 	points.push($currentObject);
 	Pathways_handler();//only there after point pushed
-	// alert("addpoint.click current object = " + points[points.length-1].$divPoint.attr('id'));
-	Point_clear(points[points.length-1].$divPoint);//reset object to blank (apart from ajax)
+	Point_clear(points[points.length-1]);//reset object to blank (apart from ajax)
 	$('#panel_wrap .panel_point:last-child').slideDown("fast", "swing");
-
-	// alert(points.length-1);
 });
 
 // function animation_show(that, number){	//TODO one day we will have shiny animtions

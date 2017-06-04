@@ -38,8 +38,8 @@
 		<div id="load_div" class="block" style ="display: none">
 			<h3> Погрузка - <small> Количество: <input type="number" class="quantity" id = "load_inner" size="2" max="15" min = "1" value="1"></small></h3>
 		<div id="load_inner">
-			<div class="quantityLoad"> Заказ : <select id="select_order_1_1" class = 'select_order_load'> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-				:: Погрузить : <input type="number" id = "quantityLoad_1_1" name="quantityLoad" min="1" max="8"></div>
+			<div class="quantityLoad"> Заказ : <select id="select_order" class = 'select_order_load'> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+				:: Погрузить : <input type="number" id = "quantityLoad" class="quantity_inner" min="1" max="8"></div>
 			</div>
 
 		</div>
@@ -47,23 +47,21 @@
 		<div id="unload_div" class="block"  style ="display: none">
 				<h3> Разгрузка - <small> Количество: <input type="number" class="quantity" id = "unload_inner" size="1" max="15" min = "1" value="1"></small></h3>
 			<div id="unload_inner">
-				<div class="quantityUnload"> Заказ : <select id='select_order_unload_1_1' class = 'select_order_unload'> <option>a12312123</option> <option>b</option> <option>c</option> </select>
-					:: Разгрузить : <input type="number" id = "quantityUnload_1_1" name="quantityUnload" min="1" max="8"></div>
+				<div class="quantityUnload"> Заказ : <select id='select_order_unload' class = 'select_order_unload'> <option>a12312123</option> <option>b</option> <option>c</option> </select>
+					:: Разгрузить : <input type="number" id = "quantityUnload" class="quantity_inner" min="1" max="8"></div>
 				</div>
 			</div>
 			<a class="boxclose" id="boxclose"></a> <!-- X close -->
 		</div>
 
 		<div class="panel_path" id="path">
-			<h3>Перегон - <small>Петропавловск Камчатский - Калининград </small></h3>
-			<p>Дистанция между пунктами: 1230км</p>
-			<p>Вес груза: 25т</p>
-			<p>Полный вес состава: 100т</p>
-			<p>Расход топлива на км : 1,2л</p>
-			<p>Полный расход топлива: 1600л</p>
-			<p>Перечень груза:</p>
+			<p><h3>Перегон - <small><span id="city1" class = "city"></span> - <span id="city2" class = "city"></span> </small></h3></p>
+			<p>Дистанция между пунктами: <span id="distance"></span></p>
+			<p>Вес груза: <span id="mass"></span></p>
+			<p>Полный вес состава: <span id="full_mass"></span></p>
+			<p>Расход топлива на км : <span id="consumption"></span></p>
+			<p>Полный расход топлива: <span id="full_consumption"></span></p>
 		</div>
-
 		</div>
 		<div style="width: 60%; margin-right: 15%; margin-left: 15%; margin-top: 25px; text-align: center;">
 			<button type="button" class="btn btn-default" id="add_point" style="width: 40%; display: none;">Добавить Точку</button>
