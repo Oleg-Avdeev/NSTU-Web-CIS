@@ -93,15 +93,22 @@ function Constr_distance(i){//i - index of current path in array pathways
 }
 
 function Constr_mass(i){
-	alert("Constr_mass");
+	// alert("Constr_mass");
 	var sum = 0;
-	points[i].$inputQuantityInner.each(function(index, el) {
+	points[i].$inputQuantityLoadInner.each(function(index, el) {
 		// alert($(el).val());
-		if ($(el).val() != 0) sum += $(el).val();
+		if ($(el).val() != 0) sum += parseInt($(el).val());
 	});
+
+	points[i].$inputQuantityUnloadInner.each(function(index, el) {
+		if ($(el).val() != 0) sum -= parseInt($(el).val());
+	});
+
 	var eqMass = 1200;//TODO get mass from db
 	var mass = sum * eqMass;
-	pathways[i].$mass.text(mass + " кг");
+	// alert("sum " + sum + ", mass = " +  mass + ", eqMass = " + eqMass);
+	if (mass >= 0) pathways[i].$mass.text(mass + " кг")
+		else pathways[i].$mass.text("Error: negative mass = " + mass + " кг")
 }
 
 $startingPoint ={};
@@ -129,6 +136,18 @@ $().ready(function() {
 	});
 });
 
+function Path_clear(){
+	//get last
+	p = pathways[pathways.length-1];
+	//clear all
+	p.$cities.text("");
+	p.$distance.text("");
+	p.$mass.text("");
+	p.$full_mass.text("");	
+	p.$consumption.text("");
+	p.$full_consumption.text("");
+}
+
 function Pathways_handler(){
 	$currentPath = $startingPath.$pathPoint.clone();
 	$currentPath.hide().appendTo('#panel_wrap');//add new pathPoint to the page
@@ -145,6 +164,7 @@ function Pathways_handler(){
 	// $newPath = new Path($startingPath);//works this time i guess
 	// alert('newpath = ' + $newPath.pathPoint.attr('id'));
 	pathways.push($currentObject);//TODO overload clone
+	Path_clear();
 	// alert('pathPoint[pathPoint.length-1] = ' + pathways[pathways.length-1].$pathPoint);
 	// $newPath.appendTo('#panel_wrap');
 }
