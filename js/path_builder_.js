@@ -11,46 +11,97 @@ function Point($point, ind) //point object (class)
 	this.$inputInnerLoad = $point.find('input#load_inner');
 	this.$inputInnerUnload = $point.find('input#unload_inner');
 
-	this.$divQuantityLoad = $point.find('div.quantityLoad');
+	this.$divQuantityLoad = $point.find('div.quantityLoad');//TODO clean mess = find
 	this.$divQuantityUnload = $point.find('div.quantityUnload');
 
+
+	this.$inputQuantityLoadInner = 		$point.find('div.quantityLoad input.quantity_inner');
+	this.$inputQuantityUnloadInner = 	$point.find('div.quantityUnload input.quantity_inner');
+
 	this.$inputQuantityInner = $point.find('input.quantity_inner');
-	// this.checkbox = $point.find('.checkbox'); idk
+
+	this.$checkbox = $point.find('.checkbox');
+
 	this.$checkLoad = $point.find('#load.checkbox');
 	this.$checkUnload = $point.find('#unload.checkbox');
 
-	this.$index = ind;
+	this.index = ind;
 
 	//handlers
-	$($point.find('.checkbox')).change(function() {//event catcher on change checkboxes for fade/show div's 
+	$(this.$checkbox).change(function() {//event catcher on change checkboxes for fade/show div's 
 		Checkbox_handle(this, $point);
+	});
+
+	$(this.$inputQuantityInner).change(function() {
+		//change cities and distance in pathways[i]
+		Constr_mass(ind);//cannot get this.$index here
 	});
 
 	$($point.find('.quantity')).on('change keyup paste mouseup', function() {
 		Quantity_prehandler(this, $point);
+		//change mass and full mass and other in pathways[i]
+		Constr_mass(ind);//TODO move constr_mass in Quantity_prehandler 
 	});
 
 	// alert("checkUnload - " + this.checkUnload.attr('id'));
 
 	// $(this.comboCity).ready(function($) {});
 
-	$(this.$comboCity).change(function(event) { 
+	$(this.$comboCity).change(function() { 
 		City_handler(this, $point);
+		//change cities and distance in pathways[i]
+		Constr_distance(ind);//cannot get this.$index here
 	}); 
 
 }
 
-function Path($path){ //path point object
+function Path($path, ind){ //path point object
 	this.$pathPoint = $path;
 
 	this.$cities = $path.find(".city");
 	this.$distance = $path.find('#distance');
-	// alert("distance path= " + this.$distance.attr('id'));
-
 	this.$mass = $path.find('#mass');
-	this.$full_mass = $path.find('#full_mass');
+	this.$full_mass = $path.find('#full_mass');	
 	this.$consumption = $path.find('#consumption');
 	this.$full_consumption = $path.find('#full_consumption');
+	
+	this.$index = ind;
+}
+
+function Constr_distanceHandle(i){//city & distance clear af
+		// alert(true);
+		if (points[i].$comboCity.val() != points[i+1].$comboCity.val()){
+			//distance from google api
+			GetDistance(points[i].$comboCity.val(), points[i+1].$comboCity.val(), pathways[i].$distance);
+	 	}
+	 	else pathways[i].$distance.text("0 м")
+	 	//get cities names from points above and below
+	 	pathways[i].$cities.each(function(index, el) {
+	 		$(el).text(points[i+index].$comboCity.val());
+	 	});
+	 	// pathways[i].$distance
+}
+
+function Constr_distance(i){//i - index of current path in array pathways
+	if (i != 0){
+		Constr_distanceHandle(i-1);
+	}
+	//check if there is next point
+	if (points.length > i+1){
+	 	Constr_distanceHandle(i);
+ 	}
+}
+
+function Constr_mass(i){
+	alert("Constr_mass");
+	var sum = 0;
+	points[i].$inputQuantityInner.each(function(index, el) {
+		// alert($(el).val());
+		if ($(el).val() != 0) sum += $(el).val();
+	});
+	var eqMass = 1200;//TODO get mass from db
+	var mass = sum * eqMass;
+	pathways[i].$mass.text(mass + " кг");
 }
 
 $startingPoint ={};
@@ -64,7 +115,7 @@ $().ready(function() {
 	$startingPoint = new Point($point, points.length);
 	points[0] = $startingPoint; // need to deep clone by hand
 
-	$startingPath = new Path($path);
+	$startingPath = new Path($path, pathways.length);
 	pathways[0] = $startingPath;
 	// alert('pathways[0] = ' + pathways[0].$pathPoint.attr('id'));
 	// pathways.push($startingPath.clone()); dosent work clone idk
@@ -80,13 +131,14 @@ $().ready(function() {
 
 function Pathways_handler(){
 	$currentPath = $startingPath.$pathPoint.clone();
-	$currentPath.hide();
-	$currentPath.appendTo('#panel_wrap');//add new pathPoint to the page
-	
+	$currentPath.hide().appendTo('#panel_wrap');//add new pathPoint to the page
+
+	Constr_distance(pathways[pathways.length-1].$index);
+
 	pathways[pathways.length-1].$pathPoint.slideDown("fast", "swing");//show previous one
 
 	$tryobject = $('#panel_wrap .panel_path:last-child');
-	var $currentObject = new Path($tryobject);
+	var $currentObject = new Path($tryobject, pathways.length);
 
 	// $currentObject.$distance.text('SMOrc');
 
@@ -95,30 +147,6 @@ function Pathways_handler(){
 	pathways.push($currentObject);//TODO overload clone
 	// alert('pathPoint[pathPoint.length-1] = ' + pathways[pathways.length-1].$pathPoint);
 	// $newPath.appendTo('#panel_wrap');
-}
-
-function Constr(_point, i){
-	// $(".city1").empty();
-	// $(".city2").empty();
-	// $(".city1").append($('#select_city option:selected').text());
-	// $(".city2").append($('#select_city_on option:selected').text());
-	// if(distance != ""){ $(".distance").empty(); $(".distance").append(distance);}
-	// if(mass != ""){$(".mass").empty(); $(".mass").append(mass);}
-	// if(full_mass != ""){$(".full_mass").empty(); $(".full_mass").append(full_mass);}
-	// if(consumption != ""){$(".consumption").empty(); $(".consumption").append(consumption);}
-	// if(full_consumption != ""){$(".full_consumption").empty(); $(".full_consumption").append(full_consumption);}
-
-	pathways[i].$distance.empty();
-
-
-	_point[i].append($('#select_city option:selected').text());
-	_point[i+1].append($('#select_city option:selected').text());
-
-	if(distance != ""){ $(".distance").empty(); $(".distance").append(distance);}
-	if(mass != ""){$(".mass").empty(); $(".mass").append(mass);}
-	if(full_mass != ""){$(".full_mass").empty(); $(".full_mass").append(full_mass);}
-	if(consumption != ""){$(".consumption").empty(); $(".consumption").append(consumption);}
-	if(full_consumption != ""){$(".full_consumption").empty(); $(".full_consumption").append(full_consumption);}
 }
 
 function Checkbox_handle(that, _point){	//event handler for checkboxes for fade/show div's 
@@ -255,9 +283,8 @@ function City_handler(that, _point){
 		dataType: 'text',
 		data: {gorod: $('#select_city option:selected').text()},
 		success: function(resp){
-			$input = $("#load_inner");
-			$input = $("#unload_inner");
-			$input.attr('max', resp);
+			$("#load_inner").attr('max', resp);
+			$("#unload_inner").attr('max', resp);
 		}
 	});
 }
