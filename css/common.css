@@ -17,4 +17,9 @@ h1{
 h1, .container{border: 1px solid #eee;}
 h1{border-width: 0 0 1px;}
 .container{border-width: 0 1px 1px;}
-th{color: #fff; background: #656565;}
+.fl{float: left;}
+.cl{clear: both;}
+.cla:after{content: ''; display: block; clear: both;}
+.pr{position: relative;}
+.pa{position: absolute;}
+.oh{overflow: hidden;}
