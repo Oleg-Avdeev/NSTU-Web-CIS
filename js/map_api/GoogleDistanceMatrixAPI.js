@@ -10,7 +10,7 @@ function GetDistance(origin, destination, output)
 
 	var query = "https://maps.googleapis.com/maps/api/distancematrix/json?" + origins + destinations + "&language=ru&key=" + apikey;
   // alert(query);
- $.ajax({
+ return $.ajax({
       crossOrigin: true,
       // dataType: 'json',
       url : query,
