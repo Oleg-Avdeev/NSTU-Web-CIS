@@ -1,0 +1,149 @@
+
+#stats th,
+#stats td{text-align: center; min-width: 60px;}
+#stats th{color: #fff; background: #656565;}
+
+.garage-an-year{
+	marg2in: 12px;
+	width: 50%;
+	padding: 3px;
+	box-sizing: border-box;
+	&:nth-child(2n+1){clear: both;}
+	.garage-an-year-title{font-size: 16px; font-weight: bold; margin: 6px;}
+	.garage-an-year-table{
+		width: 100%;
+		th{padding: 8px; background: #eee; font-weight: normal; border-bottom: 3px solid transparent;}
+		thead > tr > th:nth-child(1){border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
+		thead > tr > th:nth-last-child(1){border-top-right-radius: 4px; border-bottom-right-radius: 4px;}
+		th,
+		td{text-align: center;}
+		td{padding: 1px 0 0;}
+	}
+	.day_block{
+		z-index: 1;
+		line-height: 30px;
+		height: 30px;
+		width: 65px;
+		color: #000;
+		&:before{content: '0'; display: block;}
+		&[real-day]{transition: all 300ms;}
+		&[real-day]:before{content: attr(real-day);}
+	}
+	.not_day_of_month{opacity: .4;}
+	.trip_block,
+	.trip_block_hover{
+		z-index: 2;
+		width: 65px;
+		height: 30px;
+		top: 0;
+		.trip_line{
+			width: 100%;
+			background: #000;
+			&.inactive{background: #5a5a5a!important;}
+			&[val]:before{content: attr(val);}
+			&[val-left]{
+				border-top-left-radius: 40px;
+				border-bottom-left-radius: 40px;
+				left: 2px;
+				.trip_text{left: -2px;}
+			}
+			&[val-right]{
+				border-top-right-radius: 40px;
+				border-bottom-right-radius: 40px;
+				right: 2px;
+				.trip_text{right: -2px;}
+			}
+			&[val]{color: #fff;}
+			&[num-child="0"]{
+				background: rgb(255, 255, 255);
+				z-index: 3;
+				.trip_text{color: #000;}
+			}
+			&[num-child="1"]{background: rgb(120, 120, 189);}
+			&[num-child="2"]{background: rgb(120, 185, 189);}
+			&[num-child="3"]{background: rgb(120, 189, 132);}
+			&[num-child="4"]{background: rgb(202, 182, 79);}
+			&[num-child="5"]{background: rgb(197, 115, 74);}
+			&[num-child="6"]{background: rgb(79, 80, 142);}
+			&[num-child="7"]{background: rgb(165, 80, 161);}
+			&[num-child="8"]{background: rgb(202, 19, 102);}
+			&.hover{z-index: 1; overflow: visible;}
+			&.hover .trip_text:before{content: attr(attr-val); color: #fff;}
+			.trip_text{
+				width: 65px;
+				line-height: 30px;
+				height: 30px;
+				color: #fff;
+				&:before{content: attr(real-day); display: block;}
+			}
+		}
+	}
+	.trip_block_hover .trip_line{background: transparent!important;}
+	.day_of_month.hover,
+	.not_day_of_month.hover{
+		.day_block{
+			color: #000;
+			&:before{content: attr(attr-val);}
+		}
+		.trip_text{color: transparent;}
+		.trip_line[num-child="0"] .trip_text{color: #000;}
+		.trip_line[num-child="0"] .trip_text:before{content: attr(attr-val);}
+	}
+}
+.garage-an-year-legend{
+	margin: 8px;
+	>div{
+		cursor: default;
+		padding: 2px 0;
+		opacity: .4;
+		&.active{opacity: 1;}
+		&.inactive{opacity: .2;}
+		&:hover{opacity: .7;}
+		&:before{
+			content: "";
+			display: block;
+			float: left;
+			width: 20px;
+			height: 4px;
+			margin: 7px 10px 0 0;
+			border-radius: 2px;
+		}
+		&[num-child="1"]:before{background: rgb(120, 120, 189);}
+		&[num-child="2"]:before{background: rgb(120, 185, 189);}
+		&[num-child="3"]:before{background: rgb(120, 189, 132);}
+		&[num-child="4"]:before{background: rgb(202, 182, 79);}
+		&[num-child="5"]:before{background: rgb(197, 115, 74);}
+		&[num-child="6"]:before{background: rgb(79, 80, 142);}
+		&[num-child="7"]:before{background: rgb(165, 80, 161);}
+		&[num-child="8"]:before{background: rgb(202, 19, 102);}
+	}
+}
+
+.garage-an-month{
+	padding: 12px 12px;
+	&:nth-child(2n){
+		background: #f5f5f5;
+	}
+	.garage-an-month-title{
+		font-size: 16px;
+		color: #999;
+		text-shadow: 1px 1px 0 #fff;
+		width: 100px;
+	}
+	.garage-an-month-value{
+		top: 3px;
+		width: 96px;
+		border-radius: 3px;
+		color: #fff;
+		font-size: 12px;
+		padding: 3px 6px;
+		&[num-child="1"]{background: rgb(120, 120, 189);}
+		&[num-child="2"]{background: rgb(120, 185, 189);}
+		&[num-child="3"]{background: rgb(120, 189, 132);}
+		&[num-child="4"]{background: rgb(202, 182, 79);}
+		&[num-child="5"]{background: rgb(197, 115, 74);}
+		&[num-child="6"]{background: rgb(79, 80, 142);}
+		&[num-child="7"]{background: rgb(165, 80, 161);}
+		&[num-child="8"]{background: rgb(202, 19, 102);}
+	}
+}
