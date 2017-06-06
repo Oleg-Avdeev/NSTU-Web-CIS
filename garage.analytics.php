@@ -49,27 +49,6 @@ while ($a = $q->fetch(PDO::FETCH_ASSOC)){
 		$a['MODEL']
 	);
 }
-$arr[] = array(
-	3,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	4,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	5,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	6,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	7,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	8,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
-$arr[] = array(
-	9,"KNAJH52388A001279","\u043e777\u043e\u043e_54","Opel"
-);
 echo json_encode($arr);
 ?>;
 $.each(tractors, function(i, v){
@@ -90,7 +69,7 @@ id_group,
 measure,
 price,
 type
-FROM garage_stuff');
+FROM garage_Stuff');
 $q->execute();
 $arr = array();
 $group = array();

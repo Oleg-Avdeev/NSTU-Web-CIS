@@ -61,7 +61,7 @@ if ($_POST['METHOD'] === 'analytics.getData'){
 		$q = $DB->prepare('SELECT
 id,
 id_group
-FROM garage_stuff
+FROM garage_Stuff
 WHERE (id_group IN ('.implode(',', array_fill(0, sizeof($_POST['STUFFS_ID']), '?')).'))');
 		$q->execute($_POST['STUFFS_ID']);
 		$group = array();
@@ -125,9 +125,9 @@ WHERE (id_group IN ('.implode(',', array_fill(0, sizeof($_POST['STUFFS_ID']), '?
 SUM(w.quantity) `quantity`,
 SUM(w.quantity * s.price) `price`,
 DATE_FORMAT(o.date_close, "'.$group_by.'") `group_entity`
-FROM garage_stuff s
-INNER JOIN garage_joborder_work w ON (w.id_stuff = s.id)
-INNER JOIN garage_joborder o ON (o.id = w.id_joborder)
+FROM garage_Stuff s
+INNER JOIN garage_JobOrder_Work w ON (w.id_stuff = s.id)
+INNER JOIN garage_JobOrder o ON (o.id = w.id_joborder)
 WHERE (s.id IN ('.implode(',', array_fill(0, sizeof($ids), '?')).') && o.date_close IS NOT NULL && YEAR(o.date_close) = ?)
 GROUP BY id_group, DATE_FORMAT(o.date_close, "'.$group_by.'")';
 					$params = array_merge($params, array($gr_id), $ids, array($year));
@@ -138,9 +138,9 @@ GROUP BY id_group, DATE_FORMAT(o.date_close, "'.$group_by.'")';
 SUM(w.quantity) `quantity`,
 SUM(w.quantity * s.price) `price`,
 DATE_FORMAT(o.date_close, "'.$group_by.'") `group_entity`
-FROM garage_stuff s
-INNER JOIN garage_joborder_work w ON (w.id_stuff = s.id)
-INNER JOIN garage_joborder o ON (o.id = w.id_joborder)
+FROM garage_Stuff s
+INNER JOIN garage_JobOrder_Work w ON (w.id_stuff = s.id)
+INNER JOIN garage_JobOrder o ON (o.id = w.id_joborder)
 WHERE (s.id = ? && o.date_close IS NOT NULL && YEAR(o.date_close) = ?)
 GROUP BY DATE_FORMAT(o.date_close, "'.$group_by.'")';
 					$params = array_merge($params, array($gr_id, $gr_id, $year));
