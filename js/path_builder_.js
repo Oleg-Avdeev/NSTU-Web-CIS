@@ -61,20 +61,36 @@ function Path($path, ind){ //path point object
 	this.$cities = $path.find(".city");
 	this.$distance = $path.find('#distance');
 	this.$mass = $path.find('#mass');
-	this.$full_mass = $path.find('#full_mass');	
+	this.$object_full_mass = $path.find('#full_mass');	
 	this.$consumption = $path.find('#consumption');
+	this.$real_consumption = $path.find('#real_consumption');
 	this.$full_consumption = $path.find('#full_consumption');
 	
+	this.$full_mass = 0;
 	this.$index = ind;
-}
 
+	// StartMass_handler(ind);
+	// Consumption_handler(ind);
+	$.when(StartMass_handler(ind), Consumption_handler(ind)).done(function(a1, a2)
+		{
+			RealConsumption_handler(ind);//and full_consumption
+		});
+}
+//NOT SURE
 function Constr_distanceHandle(i){//city & distance clear af
 		// alert(true);
 		if (points[i].$comboCity.val() != points[i+1].$comboCity.val()){
 			//distance from google api
-			GetDistance(points[i].$comboCity.val(), points[i+1].$comboCity.val(), pathways[i].$distance);
+			$.when(GetDistance(points[i].$comboCity.val(), points[i+1].$comboCity.val(), pathways[i].$distance)).done(function (a1) 
+			{
+				RealConsumption_handler(i)
+			})	 
 	 	}
-	 	else pathways[i].$distance.text("0 м")
+	 	else 
+	 	{
+	 		pathways[i].$distance.text("0 м");
+	 		RealConsumption_handler(i);
+	 	}
 	 	//get cities names from points above and below
 	 	pathways[i].$cities.each(function(index, el) {
 	 		$(el).text(points[i+index].$comboCity.val());
@@ -95,20 +111,31 @@ function Constr_distance(i){//i - index of current path in array pathways
 function Constr_mass(i){
 	// alert("Constr_mass");
 	var sum = 0;
-	points[i].$inputQuantityLoadInner.each(function(index, el) {
+	var _point = points[i];
+	var _path = pathways[i];
+
+	_point.$inputQuantityLoadInner.each(function(index, el) {
 		// alert($(el).val());
 		if ($(el).val() != 0) sum += parseInt($(el).val());
 	});
 
-	points[i].$inputQuantityUnloadInner.each(function(index, el) {
+	_point.$inputQuantityUnloadInner.each(function(index, el) {
 		if ($(el).val() != 0) sum -= parseInt($(el).val());
 	});
 
 	var eqMass = 1200;//TODO get mass from db
 	var mass = sum * eqMass;
+	var full_mass = mass + _path.$full_mass;
 	// alert("sum " + sum + ", mass = " +  mass + ", eqMass = " + eqMass);
-	if (mass >= 0) pathways[i].$mass.text(mass + " кг")
-		else pathways[i].$mass.text("Error: negative mass = " + mass + " кг")
+	if (mass >= 0) 
+		{
+			_path.$mass.text(mass + " кг");
+			_path.$object_full_mass.text(full_mass + " кг");
+		}
+		else {
+			_path.$mass.text("Error: negative mass = " + mass + " кг");
+			_path.$object_full_mass.text(_path.$full_mass +' кг');
+		}
 }
 
 $startingPoint ={};
@@ -120,21 +147,96 @@ $().ready(function() {
 	var $point = $('#panel_point');	
 	var $path = $('#path');
 	$startingPoint = new Point($point, points.length);
-	points[0] = $startingPoint; // need to deep clone by hand
+	points[0] = $startingPoint; // need to be deep cloned by hand
 
 	$startingPath = new Path($path, pathways.length);
 	pathways[0] = $startingPath;
-	// alert('pathways[0] = ' + pathways[0].$pathPoint.attr('id'));
-	// pathways.push($startingPath.clone()); dosent work clone idk
-
-	// points[0] = new Point($objec, points.length-1t);
-	// var startingPoint = $.extend(true, {}, points[0]);
-	// alert('extend gives me this - ' + startingPoint.divPoint);
-	
-	$(points[0].combo2).change(function(event) { 
-		alert("Outer handler on combo 2");
-	});
+	Constr_mass(0);//get masses
 });
+
+function EndivMass_handler(){
+	var _delivery = points[points.length-1].$comboCity.find(":selected").text().split('-');
+	alert("delivery = " + _delivery);
+	$.ajax({ 
+		url: 'php/select_mass.php', 
+		type: 'POST', 
+		dataType: 'text', 
+		data: {delivery: $.trim(_delivery)}, 
+		success: function(resp){ 
+			alert(resp);
+			pathways[pathways.length-1].$object_full_mass.text(resp + " кг");
+			pathways[pathways.length-1].full_mass = parseInt(resp);
+		} 
+	});
+}
+
+function StartMass_handler(){
+	var parts = window.location.search.substr(1).split("&"); 
+	var $_GET = {}; 
+
+	for (var i = 0; i < parts.length; i++) { 
+		var temp = parts[i].split("="); 
+		$_GET[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]); 
+	} 
+
+	return $.ajax({ 
+		url: 'php/select_start_mass.php', 
+		type: 'POST', 
+		dataType: 'text', 
+		data: {Tractor: $_GET['Tractor'], Trailer: $_GET['Trailer']}, 
+			success: function(resp){
+				pathways[pathways.length-1].$object_full_mass.text(resp + ' кг');
+				pathways[pathways.length-1].$full_mass  = parseInt(resp);
+			}
+	})
+}
+
+function Consumption_handler(_i){
+	var parts = window.location.search.substr(1).split("&"); 
+	var $_GET = {}; 
+
+	for (var i = 0; i < parts.length; i++) { 
+		var temp = parts[i].split("="); 
+		$_GET[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]); 
+	} 
+
+	return $.ajax({ 
+		url: 'php/select_consumption.php', 
+		type: 'POST', 
+		dataType: 'text', 
+		data: {Tractor: $_GET['Tractor']}, 
+			success: function(resp){
+				pathways[_i].$consumption .text(resp + ' л/км');
+			}
+	})
+}
+
+function RealConsumption_handler(i){
+	var _path = pathways[i];
+
+	var _object_full_mass = parseInt(_path.$object_full_mass.text());
+	var _consumption = parseInt(_path.$consumption.text());
+
+	var _real_consumption = _consumption + _object_full_mass * 0.01;
+	_path.$real_consumption.text(_real_consumption);
+
+	var _distances = _path.$distance.text().split(" ");
+	var _distance = 0;
+
+	if (_distances[0] != 0)
+		{
+			if (_distances[1] = "км")
+					_distance = parseInt(_distances[0])
+				else
+					_distance = parseInt(_distances[0] / 1000);
+				var _full_consumption = _real_consumption + _distance;
+			}
+	else
+		full_consumption = 0;
+
+	
+	_path.$full_consumption.text(_full_consumption + ' л');
+}
 
 function Path_clear(){
 	//get last
@@ -142,10 +244,11 @@ function Path_clear(){
 	//clear all
 	p.$cities.text("");
 	p.$distance.text("");
-	p.$mass.text("");
-	p.$full_mass.text("");	
-	p.$consumption.text("");
-	p.$full_consumption.text("");
+	p.$mass.text("0 кг");
+	//FullMass_handler();
+	StartMass_handler();//full_mass clear = starting_mass get
+	p.$real_consumption.text('');//???
+	p.$full_consumption.text("");//??
 }
 
 function Pathways_handler(){
@@ -333,7 +436,6 @@ function dump(obj) {//developing tool FTW
     for (var i in obj) {
         out += i + ": " + obj[i] + "\n";
     }
-
     alert(out);
 }
 
