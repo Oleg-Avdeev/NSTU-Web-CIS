@@ -50,8 +50,9 @@
 			&[val-right]{
 				border-top-right-radius: 40px;
 				border-bottom-right-radius: 40px;
-				right: 2px;
-				.trip_text{right: -2px;}
+				width: 63px;
+				left: 0;
+				.trip_text{left: 0;}
 			}
 			&[val]{color: #fff;}
 			&[num-child="0"]{
@@ -90,8 +91,21 @@
 		.trip_line[num-child="0"] .trip_text:before{content: attr(attr-val);}
 	}
 }
+.garage-an-year-scroll{
+	z-index: 10;
+	top: 0;
+	background: #fff;
+	padding: 8px;
+	width: 922px;
+}
+.garage-an-year-info{
+	z-index: 2;
+	width: 320px;
+	background: #fff;
+	cursor: default;
+}
 .garage-an-year-legend{
-	margin: 8px;
+	padding: 0.1px;
 	>div{
 		cursor: default;
 		padding: 2px 0;

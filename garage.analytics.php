@@ -177,16 +177,42 @@ var tabs = [
 	<h3>Грузовики</h3>\
 </div>')
 		temp.append(select)
+		var scroll_empty_el = $('<div style="height: 0.1px;">')
+		var scroll_el = $('<div class="garage-an-year-scroll"></div>')
+		var year_info = $('<div class="fr pr garage-an-year-info"></div>')
 		var year_legend = $('<div class="garage-an-year-legend"></div>')
 		var year_table = $('<div id="stats_year" class="cla"></div>')
 		cont = cont
 		.add(temp)
-		.add(year_legend)
+		.add(scroll_empty_el)
+		.add(scroll_el)
 		.add(year_table)
+		scroll_el
+		.append(year_info)
+		.append(year_legend)
 		var obj = garage.analytics.trips({
 			el: {
 				year: year_table,
 				year_legend: year_legend
+			}
+		})
+		$(window).scroll(function(){
+			var off = scroll_empty_el.offset()
+			var scr = $(window).scrollTop()
+			if (scroll_el.hasClass('pf')){
+				if (scr <= off.top){
+					scroll_el.removeClass('pf')
+					scroll_empty_el.css({
+						height: '0.1px'
+					})
+				}
+			} else{
+				if (scr > off.top){
+					scroll_empty_el.css({
+						height: scroll_el.outerHeight()+'px'
+					})
+					scroll_el.addClass('pf')
+				}
 			}
 		})
 		return cont
@@ -237,9 +263,12 @@ var tabs = [
 		var cont = $()
 		var temp = $(
 '<div class="form-group">\
-	<h3>Грузовики</h3>\
+	<h3>Работы/детали</h3>\
 </div>')
 		temp.append(select)
+		var scroll_empty_el = $('<div style="height: 0.1px;">')
+		var scroll_el = $('<div class="cla garage-an-year-scroll"></div>')
+		var year_info = $('<div class="fr pr garage-an-year-info"></div>')
 		var year_legend = $('<div class="garage-an-year-legend"></div>')
 		var year_table = $('<div class="cla"></div>')
 		var group_by_tabs = $('<ul class="nav nav-tabs"></ul>')
@@ -265,13 +294,38 @@ var tabs = [
 		.add(group_by_tabs)
 		.add(group_by_conts)
 		group_by_conts.eq(0)
-		.append(year_legend)
+		.append(scroll_empty_el)
+		.append(scroll_el)
 		.append(year_table)
+		.append(year_table)
+		scroll_el
+		.append(year_info)
+		.append(year_legend)
 		var obj = garage.analytics.stuff({
 			el: {
 				year: year_table,
 				year_legend: year_legend,
-				month: group_by_conts.eq(1)
+				month: group_by_conts.eq(1),
+				info: year_info
+			}
+		})
+		$(window).scroll(function(){
+			var off = scroll_empty_el.offset()
+			var scr = $(window).scrollTop()
+			if (scroll_el.hasClass('pf')){
+				if (scr <= off.top){
+					scroll_el.removeClass('pf')
+					scroll_empty_el.css({
+						height: '0.1px'
+					})
+				}
+			} else{
+				if (scr > off.top){
+					scroll_empty_el.css({
+						height: scroll_el.outerHeight()+'px'
+					})
+					scroll_el.addClass('pf')
+				}
 			}
 		})
 		group_by_tabs.children().eq(0).trigger('click')

@@ -10,7 +10,7 @@ var $settings = {
 var getZDay = function(zdate, year){
 	var sumd = 0
 	for(var i = 0; i < 12; ++i){
-		var d = new Date(year, i+1, 0).getDate()
+		var d = new Date(year, i + 1, 0).getDate()
 		sumd += d
 		if (sumd >= zdate){
 			var date = new Date(year, i, zdate - (sumd - d))
@@ -274,6 +274,8 @@ garage.analytics.trips = function(e){
 	el: {
 		year
 		year_legend
+		month
+		info
 	}
 }
 */
@@ -318,9 +320,9 @@ garage.analytics.stuff = function(e){
 					e.el.year.find('.day_block, .trip_block, .trip_block_hover').css({
 						height: (trip_line_height*stuffs_ids.length)+'px'
 					})
-					$.each(q.stuffs_info, function(tr_id, t){
-						var st_idx = $.inArray(tr_id+'', stuffs_ids)
-						addLegendEntry(e.el.year, e.el.year_legend, st_idx, stuffs[tr_id]._name)
+					$.each(q.stuffs_info, function(gr_id, t){
+						var st_idx = $.inArray(gr_id+'', stuffs_ids)
+						addLegendEntry(e.el.year, e.el.year_legend, st_idx, stuffs[gr_id]._name)
 						$.each(t.info, function(i, v){
 							var val = v.quantity
 							var start_day
@@ -378,6 +380,22 @@ garage.analytics.stuff = function(e){
 											if ($legend_active){ return }
 											trip_line.removeClass('hover')
 											curDayEl.parent().removeClass('hover')
+										}).click(function(){
+											var formateDate = function(date){
+												var d = date.getUTCDate(),
+												m = date.getUTCMonth() + 1
+												return date.getUTCFullYear()+'.'+(m < 10 ? '0' : '')+m+'.'+(d < 10 ? '0' : '')+d
+											}
+											var a = getZDay(start_day, $curYear),
+											b = getZDay(end_day, $curYear)
+											e.el.info.html(
+'<h4>Информация</h4>\
+<ul>\
+<li>Неделя №'+v.group_entity+' ('+formateDate(new Date($curYear, a.month, a.date+1, 0, 0, 0, 0))+' – '+formateDate(new Date($curYear, b.month, b.date+1, 0, 0, 0, 0))+')</li>\
+<li>'+stuffs[gr_id]._name+'</li>\
+<li>'+(stuffs[gr_id].measure ? v.quantity+' '+stuffs[gr_id].measure : 'Кол-во: '+v.quantity)+'</li>\
+<li>Сумма: '+v.price+' руб</li>\
+</ul>')
 										})
 									)
 								})
@@ -420,6 +438,7 @@ garage.analytics.stuff = function(e){
 							.append($('<div>',{
 								class: 'pa garage-an-month-value',
 								'num-child': idx % $colors_num + 1,
+								title: stuffs[gr_id]._name,
 								html: v.quantity+' '+(stuffs[gr_id].measure || '')+'<div class="descr">'+v.price+' руб</div>'
 							}).css({
 								left: (100 + 102*idx)+'px'
