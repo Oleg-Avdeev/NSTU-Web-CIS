@@ -35,6 +35,7 @@ function Point($point, ind) //point object (class)
 	$(this.$inputQuantityInner).change(function() {
 		//change cities and distance in pathways[i]
 		Constr_mass(ind);//cannot get this.$index here
+		RealConsumption_handler(ind);
 	});
 
 	$($point.find('.quantity')).on('change keyup paste mouseup', function() {
@@ -69,16 +70,14 @@ function Path($path, ind){ //path point object
 	this.$full_mass = 0;
 	this.$index = ind;
 
-	// StartMass_handler(ind);
-	// Consumption_handler(ind);
+	//when both ajax are ready
 	$.when(StartMass_handler(ind), Consumption_handler(ind)).done(function(a1, a2)
 		{
 			RealConsumption_handler(ind);//and full_consumption
 		});
 }
-//NOT SURE
+
 function Constr_distanceHandle(i){//city & distance clear af
-		// alert(true);
 		if (points[i].$comboCity.val() != points[i+1].$comboCity.val()){
 			//distance from google api
 			$.when(GetDistance(points[i].$comboCity.val(), points[i+1].$comboCity.val(), pathways[i].$distance)).done(function (a1) 
@@ -95,7 +94,6 @@ function Constr_distanceHandle(i){//city & distance clear af
 	 	pathways[i].$cities.each(function(index, el) {
 	 		$(el).text(points[i+index].$comboCity.val());
 	 	});
-	 	// pathways[i].$distance
 }
 
 function Constr_distance(i){//i - index of current path in array pathways
@@ -124,9 +122,12 @@ function Constr_mass(i){
 	});
 
 	var eqMass = 1200;//TODO get mass from db
+
 	var mass = sum * eqMass;
+	if (i!=0) mass += parseInt(pathways[i-1].$mass.text());
+
 	var full_mass = mass + _path.$full_mass;
-	// alert("sum " + sum + ", mass = " +  mass + ", eqMass = " + eqMass);
+
 	if (mass >= 0) 
 		{
 			_path.$mass.text(mass + " кг");
@@ -211,14 +212,19 @@ function Consumption_handler(_i){
 	})
 }
 
+function roundNumber(num, dec) {
+    var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+    return result;
+}
+
 function RealConsumption_handler(i){
 	var _path = pathways[i];
 
-	var _object_full_mass = parseInt(_path.$object_full_mass.text());
+	var _mass = parseInt(_path.$mass.text());
 	var _consumption = parseInt(_path.$consumption.text());
 
-	var _real_consumption = _consumption + _object_full_mass * 0.01;
-	_path.$real_consumption.text(_real_consumption);
+	var _real_consumption = _consumption + _mass * 0.001;
+	_path.$real_consumption.text(roundNumber(_real_consumption, 2) + " л");
 
 	var _distances = _path.$distance.text().split(" ");
 	var _distance = 0;
@@ -229,13 +235,12 @@ function RealConsumption_handler(i){
 					_distance = parseInt(_distances[0])
 				else
 					_distance = parseInt(_distances[0] / 1000);
-				var _full_consumption = _real_consumption + _distance;
+				var _full_consumption = _real_consumption * _distance;
 			}
 	else
 		full_consumption = 0;
 
-	
-	_path.$full_consumption.text(_full_consumption + ' л');
+	_path.$full_consumption.text(roundNumber(_full_consumption,2) + ' л/км');
 }
 
 function Path_clear(){
@@ -262,14 +267,8 @@ function Pathways_handler(){
 	$tryobject = $('#panel_wrap .panel_path:last-child');
 	var $currentObject = new Path($tryobject, pathways.length);
 
-	// $currentObject.$distance.text('SMOrc');
-
-	// $newPath = new Path($startingPath);//works this time i guess
-	// alert('newpath = ' + $newPath.pathPoint.attr('id'));
 	pathways.push($currentObject);//TODO overload clone
 	Path_clear();
-	// alert('pathPoint[pathPoint.length-1] = ' + pathways[pathways.length-1].$pathPoint);
-	// $newPath.appendTo('#panel_wrap');
 }
 
 function Checkbox_handle(that, _point){	//event handler for checkboxes for fade/show div's 
@@ -359,6 +358,7 @@ $("#select_city").ready(function(){ //creating combobox on ready
 		$('.checkbox').fadeIn("fast", "swing");
 		//^prevent actions before ajax is done. U cant click if u cant see wht to click :smart:
 		$('#add_point').fadeIn("fast", "swing");
+		$('#save').fadeIn("fast", "swing");
 	})
 });
 
@@ -438,6 +438,10 @@ function dump(obj) {//developing tool FTW
     }
     alert(out);
 }
+
+$("#save").click(function() {//button that is addnig points
+	alert("function is not ready yet, sorry");
+});
 
 $("#add_point").click(function() {//button that is addnig points
 	$currentPoint = $startingPoint.$divPoint.clone();

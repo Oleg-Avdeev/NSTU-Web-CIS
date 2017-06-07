@@ -18,7 +18,7 @@ function GetDistance(origin, destination, output)
       success:function(data){
          // console.log(data);
          var response = JSON.parse(data);
-         alert(response.rows[0].elements[0].distance.text);
+         // alert(response.rows[0].elements[0].distance.text);
          output.text(response.rows[0].elements[0].distance.text);
       },
       error:function(){
