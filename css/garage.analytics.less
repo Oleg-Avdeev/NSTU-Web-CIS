@@ -3,6 +3,17 @@
 #stats td{text-align: center; min-width: 60px;}
 #stats th{color: #fff; background: #656565;}
 
+@garage-an-year-colors: rgb(120, 120, 189),
+						rgb(120, 185, 189),
+						rgb(120, 189, 132),
+						rgb(202, 182, 79),
+						rgb(197, 115, 74),
+						rgb(79, 80, 142),
+						rgb(165, 80, 161),
+						rgb(202, 19, 102);
+@garage-an-year-colors-num: length(@garage-an-year-colors);
+@garage-an-year-colors-h: 15%;
+
 .garage-an-year{
 	marg2in: 12px;
 	width: 50%;
@@ -19,76 +30,68 @@
 		td{text-align: center;}
 		td{padding: 1px 0 0;}
 	}
-	.day_block{
-		z-index: 1;
-		line-height: 30px;
-		height: 30px;
-		width: 65px;
-		color: #000;
-		&:before{content: '0'; display: block;}
-		&[real-day]{transition: all 300ms;}
-		&[real-day]:before{content: attr(real-day);}
-	}
 	.not_day_of_month{opacity: .4;}
-	.trip_block,
-	.trip_block_hover{
-		z-index: 2;
+	.block{
 		width: 65px;
 		height: 30px;
-		top: 0;
-		.trip_line{
-			width: 100%;
-			background: #000;
-			&.inactive{background: #5a5a5a!important;}
-			&[val]:before{content: attr(val);}
-			&[val-left]{
+		.line{
+			z-index: 2;
+			width: 65px;
+			background: #fff;
+			border: 0 solid #fff;
+			&.left{
 				border-top-left-radius: 40px;
 				border-bottom-left-radius: 40px;
 				left: 2px;
-				.trip_text{left: -2px;}
+				.text{left: -2px;}
 			}
-			&[val-right]{
+			&.right{
 				border-top-right-radius: 40px;
 				border-bottom-right-radius: 40px;
 				width: 63px;
 				left: 0;
-				.trip_text{left: 0;}
+				.text{left: 0;}
 			}
-			&[val]{color: #fff;}
-			&[num-child="0"]{
-				background: rgb(255, 255, 255);
-				z-index: 3;
-				.trip_text{color: #000;}
-			}
-			&[num-child="1"]{background: rgb(120, 120, 189);}
-			&[num-child="2"]{background: rgb(120, 185, 189);}
-			&[num-child="3"]{background: rgb(120, 189, 132);}
-			&[num-child="4"]{background: rgb(202, 182, 79);}
-			&[num-child="5"]{background: rgb(197, 115, 74);}
-			&[num-child="6"]{background: rgb(79, 80, 142);}
-			&[num-child="7"]{background: rgb(165, 80, 161);}
-			&[num-child="8"]{background: rgb(202, 19, 102);}
-			&.hover{z-index: 1; overflow: visible;}
-			&.hover .trip_text:before{content: attr(attr-val); color: #fff;}
-			.trip_text{
+			.text{
 				width: 65px;
 				line-height: 30px;
 				height: 30px;
-				color: #fff;
-				&:before{content: attr(real-day); display: block;}
+				color: #000;
+			}
+			&.colored{
+				z-index: 0;
+				&.inactive{background: #aaa!important;}
+				&.hover{
+					.loop(@i) when (@i > 0){
+						.loop(@i - 1);
+						&:nth-child(@{garage-an-year-colors-num}n + @{i}){
+							background: darken(extract(@garage-an-year-colors, @i), @garage-an-year-colors-h);
+						}
+					}
+					.loop(@garage-an-year-colors-num);
+				}
+				.text{color: #fff;}
 			}
 		}
 	}
-	.trip_block_hover .trip_line{background: transparent!important;}
+	.block_hover:extend(.garage-an-year .block){
+		z-index: 3;
+		top: 1px;
+		.line{background: transparent;}
+	}
 	.day_of_month.hover,
 	.not_day_of_month.hover{
-		.day_block{
-			color: #000;
-			&:before{content: attr(attr-val);}
+		.block .line{
+			.text{color: transparent;}
+			&:not(.colored) .text{
+				color: #000;
+			}
+			&.hover{
+				z-index: 1;
+				overflow: visible;
+				.text{color: #fff;}
+			}
 		}
-		.trip_text{color: transparent;}
-		.trip_line[num-child="0"] .trip_text{color: #000;}
-		.trip_line[num-child="0"] .trip_text:before{content: attr(attr-val);}
 	}
 }
 .garage-an-year-scroll{
@@ -106,7 +109,7 @@
 }
 .garage-an-year-legend{
 	padding: 0.1px;
-	>div{
+	.garage-an-year-legend-els > div{
 		cursor: default;
 		padding: 2px 0;
 		opacity: .4;
@@ -122,16 +125,20 @@
 			margin: 7px 10px 0 0;
 			border-radius: 2px;
 		}
-		&[num-child="1"]:before{background: rgb(120, 120, 189);}
-		&[num-child="2"]:before{background: rgb(120, 185, 189);}
-		&[num-child="3"]:before{background: rgb(120, 189, 132);}
-		&[num-child="4"]:before{background: rgb(202, 182, 79);}
-		&[num-child="5"]:before{background: rgb(197, 115, 74);}
-		&[num-child="6"]:before{background: rgb(79, 80, 142);}
-		&[num-child="7"]:before{background: rgb(165, 80, 161);}
-		&[num-child="8"]:before{background: rgb(202, 19, 102);}
+		.loop(@i) when (@i > 0){
+			.loop(@i - 1);
+			/*&:nth-child(@{garage-an-year-colors-num}n + @{i}):before{background: extract(@garage-an-year-colors, @i);}*/
+			/*&:nth-child(@{garage-an-year-colors-num}n + @{i}):before:extend(.garage-an-year .block .line.colored:nth-child(@{garage-an-year-colors-num}n + @{i})){}*/
+		}
+		/*.loop(@garage-an-year-colors-num);*/
 	}
 }
+.loop(@i) when (@i > 0){
+	.loop(@i - 1);
+	.garage-an-year .block .line.colored:nth-child(@{garage-an-year-colors-num}n + @{i}),
+	.garage-an-year-legend .garage-an-year-legend-els > div:nth-child(@{garage-an-year-colors-num}n + @{i}):before{background: extract(@garage-an-year-colors, @i);}
+}
+.loop(@garage-an-year-colors-num);
 
 .garage-an-month{
 	padding: 12px 12px;
@@ -142,7 +149,7 @@
 		font-size: 16px;
 		color: #999;
 		text-shadow: 1px 1px 0 #fff;
-		width: 100px;
+		width: 106px;
 	}
 	.garage-an-month-value{
 		top: 3px;
@@ -151,13 +158,10 @@
 		color: #fff;
 		font-size: 12px;
 		padding: 3px 6px;
-		&[num-child="1"]{background: rgb(120, 120, 189);}
-		&[num-child="2"]{background: rgb(120, 185, 189);}
-		&[num-child="3"]{background: rgb(120, 189, 132);}
-		&[num-child="4"]{background: rgb(202, 182, 79);}
-		&[num-child="5"]{background: rgb(197, 115, 74);}
-		&[num-child="6"]{background: rgb(79, 80, 142);}
-		&[num-child="7"]{background: rgb(165, 80, 161);}
-		&[num-child="8"]{background: rgb(202, 19, 102);}
+		.loop(@i) when (@i > 0){
+			.loop(@i - 1);
+			&[num-child="@{i}"]{background: extract(@garage-an-year-colors, @i);}
+		}
+		.loop(@garage-an-year-colors-num);
 	}
 }

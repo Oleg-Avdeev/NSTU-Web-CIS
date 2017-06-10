@@ -9,6 +9,7 @@ $DB = connect();
 	<meta charset="utf-8">
 	<title>Корпоративная Информационная Система - Выбор Состава</title>
 	<script src="js/jquery-3.2.0.min.js"></script>
+	<script src="js/tabControl.js"></script>
 	<script src="js/garage.js"></script>
 	<script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
 
@@ -96,7 +97,6 @@ foreach($arr as $a){
 }
 echo json_encode($arr);
 ?>;
-var stuff_group = {}
 $.each(stuff, function(i, v){
 	v = {
 		id: v[0],
@@ -108,252 +108,13 @@ $.each(stuff, function(i, v){
 	}
 	v._name = v.name
 	stuff[i] = v
-	if (!v.id_group){ stuff_group[v.id] = [] }
-})
-$.each(stuff, function(i, v){
-	if (v.id_group){ stuff_group[v.id_group].push(v.id) }
 })
 
-var setMaxSelectMultiple = function(select, max){
-	var $isDown = false
-	var $highlight = false
-	select.children().mousedown(function(e){
-		$isDown = true
-		$highlight = true
-		if (e.ctrlKey){
-			var val = select.val()
-			if ($.inArray(this.value, val) === -1){
-				if (max <= select.val().length){
-					e.preventDefault()
-				}
-			} else{
-				$highlight = false
-			}
-		}
-	}).mousemove(function(e){
-		if ($isDown && $highlight){
-			var val = select.val()
-			if ($.inArray(this.value, val) === -1){
-				if (max <= val.length){
-					e.preventDefault()
-				}
-			}
-		}
-	})
-	$(document.body).mouseup(function(){
-		$isDown = false
-	})
-}
-var tab_cont = $('#tabs')
-var $curTab = -1
-var tabs = [
-{
-	text: 'Поездки',
-	init: function(){
-		var $maxTractorsSelected = 8
-		var select = $('<select>',{
-			multiple: '',
-			class: 'form-control'
-		}).css({
-			height: '140px'
-		})
-		$.each(tractors, function(i, v){
-			select.append($('<option>',{
-				value: i,
-				text: v._name
-			}))
-		})
-		setMaxSelectMultiple(select, $maxTractorsSelected)
-		select.change(function(){
-			var ids = {}
-			$.each($(this).val(), function(i, v){
-				ids[tractors[v].id+''] = tractors[v]
-			})
-			obj.loadData(ids)
-		})
-		var cont = $()
-		var temp = $(
-'<div class="form-group">\
-	<h3>Грузовики</h3>\
-</div>')
-		temp.append(select)
-		var scroll_empty_el = $('<div style="height: 0.1px;">')
-		var scroll_el = $('<div class="garage-an-year-scroll"></div>')
-		var year_info = $('<div class="fr pr garage-an-year-info"></div>')
-		var year_legend = $('<div class="garage-an-year-legend"></div>')
-		var year_table = $('<div id="stats_year" class="cla"></div>')
-		cont = cont
-		.add(temp)
-		.add(scroll_empty_el)
-		.add(scroll_el)
-		.add(year_table)
-		scroll_el
-		.append(year_info)
-		.append(year_legend)
-		var obj = garage.analytics.trips({
-			el: {
-				year: year_table,
-				year_legend: year_legend
-			}
-		})
-		$(window).scroll(function(){
-			var off = scroll_empty_el.offset()
-			var scr = $(window).scrollTop()
-			if (scroll_el.hasClass('pf')){
-				if (scr <= off.top){
-					scroll_el.removeClass('pf')
-					scroll_empty_el.css({
-						height: '0.1px'
-					})
-				}
-			} else{
-				if (scr > off.top){
-					scroll_empty_el.css({
-						height: scroll_el.outerHeight()+'px'
-					})
-					scroll_el.addClass('pf')
-				}
-			}
-		})
-		return cont
-	},
-	show: function(){
-		
-	}
-},
-{
-	text: 'Работы/детали',
-	init: function(){
-		var $maxStuffSelected = 8
-		var select = $('<select>',{
-			multiple: '',
-			class: 'form-control'
-		}).css({
-			height: '140px'
-		})
-		$.each(stuff_group, function(id, gr){
-			var v = stuff[id]
-			select.append($('<option>',{
-				value: id,
-				text: v._name
-			}))
-			$.each(gr, function(_, id){
-				v = stuff[id]
-				select.append($('<option>',{
-					value: id,
-					text: '---'+v._name
-				}))
-			})
-		})
-		setMaxSelectMultiple(select, $maxStuffSelected)
-		select.change(function(){
-			updateData()
-		})
-		var updateData = function(){
-			var stuffs = {}
-			$.each(select.val(), function(i, v){
-				stuffs[v+''] = stuff[v]
-			})
-			obj.loadData({
-				stuffs: stuffs,
-				group_by: group_by
-			})
-		}
-		var obj
-		var cont = $()
-		var temp = $(
-'<div class="form-group">\
-	<h3>Работы/детали</h3>\
-</div>')
-		temp.append(select)
-		var scroll_empty_el = $('<div style="height: 0.1px;">')
-		var scroll_el = $('<div class="cla garage-an-year-scroll"></div>')
-		var year_info = $('<div class="fr pr garage-an-year-info"></div>')
-		var year_legend = $('<div class="garage-an-year-legend"></div>')
-		var year_table = $('<div class="cla"></div>')
-		var group_by_tabs = $('<ul class="nav nav-tabs"></ul>')
-		var group_by_conts = $()
-		var group_by
-		$.each({
-			week: 'Неделя',
-			month: 'Месяц'
-		}, function(i, v){
-			group_by_tabs.append($('<li><a href="javascript://">'+v+'</a></li>').click(function(){
-				if (group_by === i){ return }
-				group_by_tabs.children().removeClass('active')
-				group_by_conts.hide()
-				$(this).addClass('active')
-				group_by_conts.eq(group_by_tabs.children().index(this)).show()
-				group_by = i
-				updateData()
-			}))
-			group_by_conts = group_by_conts.add('<div>')
-		})
-		cont = cont
-		.add(temp)
-		.add(group_by_tabs)
-		.add(group_by_conts)
-		group_by_conts.eq(0)
-		.append(scroll_empty_el)
-		.append(scroll_el)
-		.append(year_table)
-		.append(year_table)
-		scroll_el
-		.append(year_info)
-		.append(year_legend)
-		var obj = garage.analytics.stuff({
-			el: {
-				year: year_table,
-				year_legend: year_legend,
-				month: group_by_conts.eq(1),
-				info: year_info
-			}
-		})
-		$(window).scroll(function(){
-			var off = scroll_empty_el.offset()
-			var scr = $(window).scrollTop()
-			if (scroll_el.hasClass('pf')){
-				if (scr <= off.top){
-					scroll_el.removeClass('pf')
-					scroll_empty_el.css({
-						height: '0.1px'
-					})
-				}
-			} else{
-				if (scr > off.top){
-					scroll_empty_el.css({
-						height: scroll_el.outerHeight()+'px'
-					})
-					scroll_el.addClass('pf')
-				}
-			}
-		})
-		group_by_tabs.children().eq(0).trigger('click')
-		return cont
-	},
-	show: function(){
-		
-	}
-}
-]
-var tab_list = $()
-var tab_conts = $()
-$.each(tabs, function(i, v){
-	var tab_el = $('<li><a href="javascript://">'+v.text+'</a></li>')
-	tab_el.click(function(){
-		if ($curTab === i){ return }
-		$curTab = i
-		tab_list.removeClass('active')
-		$(this).addClass('active')
-		tab_conts.hide().eq(i).show()
-		v.show()
-	})
-	tab_list = tab_list.add(tab_el)
-	tab_conts = tab_conts.add($('<div>').append(v.init()))
+garage.analytics({
+	tractors: tractors,
+	stuff: stuff
 })
-tab_cont.append(tab_list)
-tab_list.eq(0).trigger('click')
-$('#conts').append(tab_conts)
+
 })()
 </script>
 </div>
