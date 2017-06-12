@@ -60,7 +60,20 @@ garage = function(){
 	
 }
 /*
-
+{
+	tractors: {
+		id: {
+			
+		}
+		...
+	}
+	stuff: {
+		id: {
+			
+		}
+		...
+	}
+}
 */
 garage.analytics = function(e){
 	var tractors = e.tractors
@@ -130,37 +143,56 @@ garage.analytics = function(e){
 		})
 	}
 
+	var createSelectYear = function(){
+		var el = $('<select>', {
+			class: 'form-control'
+		})
+		for (var i = $curYear, to = i - 20; i >= to; --i){
+			el.append($('<option>', {
+				value: i,
+				text: i
+			}))
+		}
+		return el
+	}
 	var tabs = [
 	{
 		text: 'Поездки',
 		init: function(){
 			var $maxTractorsSelected = 8
-			var select = $('<select>',{
+			var selectTractors = $('<select>', {
 				multiple: '',
 				class: 'form-control'
 			}).css({
 				height: '180px'
 			})
 			$.each(tractors, function(i, v){
-				select.append($('<option>',{
+				selectTractors.append($('<option>', {
 					value: i,
 					text: v._name
 				}))
 			})
-			setMaxSelectMultiple(select, $maxTractorsSelected)
-			select.change(function(){
+			setMaxSelectMultiple(selectTractors, $maxTractorsSelected)
+			selectTractors.change(function(){
 				var ids = {}
 				$.each($(this).val(), function(i, v){
 					ids[tractors[v].id+''] = tractors[v]
 				})
-				obj.loadData(ids)
+				obj.loadData({
+					tractors: ids
+				})
+			})
+			var selectYear = createSelectYear()
+			selectYear.change(function(){
+				obj.setYear(this.value)
 			})
 			var cont = $()
-			var temp = $(
-'<div class="form-group">\
-	<h3>Грузовики</h3>\
-</div>')
-			temp.append(select)
+			var temp = $('<div class="form-group"></div>')
+			temp
+			.append('<h3>Грузовики</h3>')
+			.append(selectTractors)
+			.append('<h3>Год</h3>')
+			.append(selectYear)
 			var scroll_empty_el = $('<div style="height: 0.1px;">')
 			var scroll_el = $('<div class="garage-an-year-scroll"></div>')
 			var year_info = $('<div class="fr pr garage-an-year-info"></div>')
@@ -191,7 +223,7 @@ garage.analytics = function(e){
 					}
 				} else{
 					if (scr > off.top){
-						scroll_empty_el[0].style.height = scroll_el.outerHeight()+'px'
+						scroll_empty_el[0].style.height = scroll_el.outerHeight() + 'px'
 						scroll_el[0].classList.add('pf')
 					}
 				}
@@ -206,7 +238,7 @@ garage.analytics = function(e){
 		text: 'Работы/детали',
 		init: function(){
 			var $maxStuffSelected = 8
-			var select = $('<select>',{
+			var selectStuff = $('<select>',{
 				multiple: '',
 				class: 'form-control'
 			}).css({
@@ -214,25 +246,25 @@ garage.analytics = function(e){
 			})
 			$.each(stuff_group, function(id, gr){
 				var v = stuff[id]
-				select.append($('<option>',{
+				selectStuff.append($('<option>',{
 					value: id,
 					text: v._name
 				}))
 				$.each(gr, function(_, id){
 					v = stuff[id]
-					select.append($('<option>',{
+					selectStuff.append($('<option>',{
 						value: id,
 						text: '---' + v._name
 					}))
 				})
 			})
-			setMaxSelectMultiple(select, $maxStuffSelected)
-			select.change(function(){
+			setMaxSelectMultiple(selectStuff, $maxStuffSelected)
+			selectStuff.change(function(){
 				updateData()
 			})
 			var updateData = function(){
 				var stuffs = {}
-				$.each(select.val(), function(i, v){
+				$.each(selectStuff.val(), function(i, v){
 					stuffs[v+''] = stuff[v]
 				})
 				obj.loadData({
@@ -241,12 +273,17 @@ garage.analytics = function(e){
 				})
 			}
 			var obj
+			var selectYear = createSelectYear()
+			selectYear.change(function(){
+				obj.setYear(this.value)
+			})
 			var cont = $()
-			var temp = $(
-'<div class="form-group">\
-	<h3>Работы/детали</h3>\
-</div>')
-			temp.append(select)
+			var temp = $('<div class="form-group"></div>')
+			temp
+			.append('<h3>Работы/детали</h3>')
+			.append(selectStuff)
+			.append('<h3>Год</h3>')
+			.append(selectYear)
 			var scroll_empty_el = $('<div style="height: 0.1px;">')
 			var scroll_el = $('<div class="cla garage-an-year-scroll"></div>')
 			var year_info = $('<div class="fr pr garage-an-year-info"></div>')
@@ -312,12 +349,12 @@ garage.analytics = function(e){
 					}
 				} else{
 					if (scr > off.top){
-						scroll_empty_el[0].style.height = scroll_el.outerHeight()+'px'
+						scroll_empty_el[0].style.height = scroll_el.outerHeight() + 'px'
 						scroll_el[0].classList.add('pf')
 					}
 				}
 			})
-			group_by_els.tabs.eq(1).trigger('click')
+			group_by_els.tabs.eq(0).trigger('click')
 			return cont
 		},
 		show: function(){
@@ -338,7 +375,7 @@ garage.analytics = function(e){
 	})
 	$('#tabs').append(els.tabs)
 	$('#conts').append(els.conts)
-	els.tabs.eq(1).trigger('click')
+	els.tabs.eq(0).trigger('click')
 	})()
 }
 
@@ -749,13 +786,22 @@ var clearEntries = function(){
 }
 */
 garage.analytics.trips = function(e){
-	var clearData = function(){
-		clearLegendYear(e.el.year)
-		e.el.year.find('.trip_block, .trip_block_hover').children().remove()
-		e.el.year_legend.html('')
+	var $year = $curYear
+	var $arg
+	/*
+	{
+		tractors: {
+			id: {
+				_name
+				...
+			}
+			...
+		}
 	}
-	var loadData = function(tractors){
-		var tractors_ids = Object.keys(tractors)
+	*/
+	var loadData = function(arg){
+		$arg = $.extend(true, {}, arg)
+		var tractors_ids = Object.keys(arg.tractors)
 		if (aj){ aj.abort() }
 		if (tractors_ids.length === 0){
 			yearObj.clearEntries()
@@ -767,7 +813,8 @@ garage.analytics.trips = function(e){
 			data: {
 				METHOD: 'analytics.getData',
 				TYPE: 'km',
-				TRACTORS_ID: tractors_ids
+				TRACTORS_ID: tractors_ids,
+				YEAR: $year
 			},
 			dataType: 'json',
 			success: function(q){
@@ -775,7 +822,7 @@ garage.analytics.trips = function(e){
 				$.each(q.tractors_trips, function(tractor_id, tractor){
 					var lines = []
 					$.each(tractor.trips, function(i, v){
-						var dkm = (v.km/(v.end_day - v.start_day + 1)).toFixed(0)
+						var dkm = (v.km / (v.end_day - v.start_day + 1)).toFixed(0)
 						lines.push({
 							start_day: v.start_day,
 							end_day: v.end_day,
@@ -785,13 +832,7 @@ garage.analytics.trips = function(e){
 						})
 					})
 					entries.push({
-						legend_title: tractors[tractor_id]._name,
-						showInfo: function(value){
-							
-						},
-						onHover: function(w){
-							
-						},
+						legend_title: arg.tractors[tractor_id]._name,
 						lines: lines
 					})
 				})
@@ -801,17 +842,24 @@ garage.analytics.trips = function(e){
 			}
 		})
 	}
-	//e.el.year.append(buildYear($curYear))
 	var yearObj = Year({
 		table: e.el.year,
 		legend: e.el.year_legend,
 		max_entries: $colors_num
 	})
 	yearObj.build({
-		year: $curYear
+		year: $year
 	})
 	var aj
 	return new function(){
+		this.setYear = function(year){
+			if ($year === year){ return }
+			$year = year
+			yearObj.build({
+				year: $year
+			})
+			loadData($arg)
+		}
 		this.loadData = loadData
 	}()
 }
@@ -826,10 +874,22 @@ garage.analytics.trips = function(e){
 }
 */
 garage.analytics.stuff = function(e){
-	var clearData = function(){
-		e.el.month.find('.garage-an-month-value').remove()
+	var $year = $curYear
+	var $arg
+	/*
+	{
+		group_by - 'week' | 'month'
+		stuffs: {
+			id: {
+				_name
+				...
+			}
+			...
+		}
 	}
+	*/
 	var loadData = function(arg){
+		$arg = $.extend(true, {}, arg)
 		var stuffs = arg.stuffs
 		var stuffs_ids = Object.keys(stuffs)
 		if (aj){ aj.abort() }
@@ -846,7 +906,7 @@ garage.analytics.stuff = function(e){
 				TYPE: 'stuff',
 				STUFFS_ID: stuffs_ids,
 				GROUP_BY: arg.group_by,
-				YEAR: $curYear
+				YEAR: $year
 			},
 			dataType: 'json',
 			success: function(q){
@@ -883,12 +943,6 @@ garage.analytics.stuff = function(e){
 						})
 						entries.push({
 							legend_title: stuff._name,
-							showInfo: function(value){
-								
-							},
-							onHover: function(w){
-								
-							},
 							lines: lines
 						})
 					})
@@ -896,7 +950,8 @@ garage.analytics.stuff = function(e){
 						group_by: 'week',
 						entries: entries
 					})
-				} else if(arg.group_by === 'month'){
+				}
+				else if(arg.group_by === 'month'){
 					var el = e.el.month.find('.garage-an-month')
 					$.each(q.stuffs_info, function(stuff_id, qstuff){
 						var idx = $.inArray(stuff_id, stuffs_ids)
@@ -922,16 +977,24 @@ garage.analytics.stuff = function(e){
 		max_entries: $colors_num
 	})
 	yearObj.build({
-		year: $curYear
+		year: $year
 	})
 	for (var i = 0; i < 12; ++i){
 		e.el.month.append(
 '<div class="pr garage-an-month">'+
-	'<div class="garage-an-month-title">'+$months[i]+'</div>'+
+	'<div class="garage-an-month-title">' + $months[i] + '</div>'+
 '</div>')
 	}
 	var aj
 	return new function(){
+		this.setYear = function(year){
+			if ($year === year){ return }
+			$year = year
+			yearObj.build({
+				year: $year
+			})
+			loadData($arg)
+		}
 		this.loadData = loadData
 	}()
 }

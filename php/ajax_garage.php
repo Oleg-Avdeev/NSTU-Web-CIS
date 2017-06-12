@@ -7,13 +7,15 @@ try{
 if (!isset($_POST['METHOD'])){
 	throw new Exception('data');
 }
+$CurYear = date('Y');
 if ($_POST['METHOD'] === 'analytics.getData'){
 	if (!isset($_POST['TYPE'])){
 		throw new Exception('data');
 	}
 	if($_POST['TYPE'] === 'km'){
 		if (
-		!isset($_POST['TRACTORS_ID']) || !is_array($_POST['TRACTORS_ID'])
+		!isset($_POST['TRACTORS_ID']) || !is_array($_POST['TRACTORS_ID']) ||
+		!isset($_POST['YEAR']) || filter_var($_POST['YEAR'], FILTER_VALIDATE_INT) === false || $_POST['YEAR'] > $CurYear
 		){
 			throw new Exception('data');
 		}
@@ -23,11 +25,12 @@ if ($_POST['METHOD'] === 'analytics.getData'){
 				throw new Exception('data');
 			}
 		}
+		$year = (int)$_POST['YEAR'];
 		$R['tractors_trips'] = array();
 		foreach ($_POST['TRACTORS_ID'] as $tractor_id){
-			$total_days = date('z', mktime(0, 0, 0, 1, 0, date('Y') + 1));
+			$total_days = date('z', mktime(0, 0, 0, 1, 0, $year + 1));
 			$trips = 40;
-			$dd = ($total_days - 1)/$trips;
+			$dd = ($total_days - 1) / $trips;
 			$R['tractors_trips'][$tractor_id] = array('trips' => array());
 			$r = &$R['tractors_trips'][$tractor_id];
 			for ($i = 0; $i < $trips; ++$i){
@@ -36,7 +39,7 @@ if ($_POST['METHOD'] === 'analytics.getData'){
 				$r['trips'][] = array(
 					'start_day' => $a,
 					'end_day' => $b,
-					'km' => 800 + (($i + $tractor_id) % 8)*100
+					'km' => 800 + (($i + $tractor_id) % 8) * 100
 				);
 			}
 		}
@@ -45,7 +48,7 @@ if ($_POST['METHOD'] === 'analytics.getData'){
 		if (
 		!isset($_POST['STUFFS_ID']) || !is_array($_POST['STUFFS_ID']) ||
 		!isset($_POST['GROUP_BY']) || !in_array($_POST['GROUP_BY'], array('week', 'month')) ||
-		!isset($_POST['YEAR']) || filter_var($_POST['YEAR'], FILTER_VALIDATE_INT) === false || $_POST['YEAR'] > date('Y')
+		!isset($_POST['YEAR']) || filter_var($_POST['YEAR'], FILTER_VALIDATE_INT) === false || $_POST['YEAR'] > $CurYear
 		){
 			throw new Exception('data');
 		}
@@ -82,19 +85,19 @@ WHERE (id_group IN ('.implode(',', array_fill(0, sizeof($_POST['STUFFS_ID']), '?
 					$week = 0;
 					$day = date('N', mktime(0, 0, 0, 1, 1, $year));
 					if ($day > 1){
-						$q = 10 + (($week++ + $gr_id) % 8)*30;
+						$q = 10 + (($week++ + $gr_id) % 8) * 30;
 						$r['info'][] = array(
 							'group_entity' => 0,
 							'quantity' => $q,
 							'price' => $q * 10
 						);
-						$day = 7 - ($day-1);
+						$day = 7 - ($day - 1);
 						++$day;
 					} else{
 						++$week;
 					}
 					for (; $day < $total_days; ++$week){
-						$q = 10 + (($week + $gr_id) % 8)*30;
+						$q = 10 + (($week + $gr_id) % 8) * 30;
 						$r['info'][] = array(
 							'group_entity' => $week,
 							'quantity' => $q,
@@ -105,7 +108,7 @@ WHERE (id_group IN ('.implode(',', array_fill(0, sizeof($_POST['STUFFS_ID']), '?
 				}
 				else if($_POST['GROUP_BY'] === 'month'){
 					for ($i = 0; $i < 12; ++$i){
-						$q = (10 + (($i + $gr_id) % 8)*30)*4;
+						$q = (10 + (($i + $gr_id) % 8) * 30) * 4;
 						$r['info'][] = array(
 							'group_entity' => $i,
 							'quantity' => $q,
@@ -159,6 +162,7 @@ GROUP BY DATE_FORMAT(o.date_close, "'.$group_by.'")';
 				$a['group_entity'] = (int)$a['group_entity'];
 				$R['stuffs'][$a['id']]['info'][] = $a;
 			}
+			$R['sql'] = $sql;
 		}
 	}
 	else{
